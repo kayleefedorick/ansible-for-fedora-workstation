@@ -1,0 +1,264 @@
+---
+# Fedora 42 Workstation Ansible Playbook
+# playbook.yml
+- name: Setup Fedora 42 Workstation
+  hosts: localhost
+  become: true
+  vars:
+    username: "{{ ansible_user_id }}"
+    system_packages:
+      - dnf-utils
+      - glances
+      - fzf
+      - vnstat
+      - vim
+      - jq
+      - pv
+      - rclone
+      - restic
+      - htop
+      - nethogs
+      - nmap
+      - tmux
+      - tmux-powerline
+      - testssl
+      - powerline
+      - ps_mem
+      - zoxide
+      - whois
+      - zsh
+    development_packages:
+      - git
+      - golang
+      - httpie
+      - podman
+      - podman-compose
+      - nodejs
+      - pipx
+      - psql
+      - pgcli
+      - python3
+      - uv
+      - rust
+      - rustup
+      - shellcheck
+      - yamllint
+    desktop_packages:
+      - fastfetch
+      - fira-code-fonts
+      - papirus-icon-theme
+    flatpak_packages:
+      - app.fotema.Fotema
+      - app.drey.Dialect
+      - app.devsuite.Ptyxis
+      - com.vscodium.codium
+      - com.spotify.Client
+      - com.valvesoftware.Steam
+      - com.github.tchx84.Flatseal
+      - com.mattjakeman.ExtensionManager
+      - com.usebruno.Bruno
+      - com.github.qarmin.czkawka
+      - com.rafaelmardojai.Blanket
+      - de.haeckerfelix.Shortwave
+      - dev.geopjr.Tuba
+      - im.riot.Riot
+      - io.missioncenter.MissionCenter
+      - io.podman_desktop.PodmanDesktop
+      - io.freetubeapp.FreeTube
+      - io.github.seadve.Mousai
+      - net.poedit.Poedit
+      - net.displaycal.DisplayCAL
+      - org.mozilla.firefox
+      - org.mozilla.Thunderbird
+      - org.gimp.GIMP
+      - org.gnome.SoundRecorder
+      - org.gnome.meld
+      - org.videolan.VLC
+      - org.libreoffice.LibreOffice
+      - org.signal.Signal
+      - org.keepassxc.KeePassXC
+      - org.gnome.World.PikaBackup
+      - org.gnome.gitlab.somas.Apostrophe
+      - org.gaphor.Gaphor
+      - org.pgadmin.pgadmin4
+      - org.libretro.RetroArch
+      - re.sonny.Junction
+      # - org.qgis.qgis
+      # - com.mitchellh.ghostty
+    gnome_extensions:
+      - 2 # Frippery Move Clock
+      - 19 # User Themes
+      - 21 # Workspace Indicator
+      - 545 # Hide Top Bar
+      - 779  # Clipboard indicator
+      - 5219 # TopHat
+      - 6523 # Panel Workspace Scroll
+      - 7065 # Tiling Shell
+      - 7851  # Exchange Electricity Price Indicator
+
+  tasks:
+    - name: Update all packages
+      dnf:
+        name: "*"
+        state: latest
+      tags:
+        - update
+
+    # Install RPM packages
+
+    - name: Install system RPM packages
+      dnf:
+        name: "{{ system_packages }}"
+        state: present
+        update_cache: yes
+      tags:
+        - packages
+        - system
+
+    - name: Install development RPM packages
+      dnf:
+        name: "{{ development_packages }}"
+        state: present
+        update_cache: yes
+      tags:
+        - packages
+        - development
+
+    - name: Install desktop RPM packages
+      dnf:
+        name: "{{ desktop_packages }}"
+        state: present
+        update_cache: yes
+      tags:
+        - packages
+        - desktop
+
+    # - name: Enable RPM Fusion Free repository
+    #   dnf:
+    #     name: "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ ansible_distribution_version }}.noarch.rpm"
+    #     state: present
+    #   tags:
+    #     - rpmfusion
+
+    # - name: Enable RPM Fusion Nonfree repository
+    #   dnf:
+    #     name: "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_distribution_version }}.noarch.rpm"
+    #     state: present
+    #   tags:
+    #     - rpmfusion
+
+    # - name: Install Steam from RPM Fusion
+    #   dnf:
+    #     name: steam
+    #     state: present
+    #   tags:
+    #     - gaming
+    #     - steam
+    
+    # Flatpak setup
+
+    - name: Ensure Flatpak is installed
+      dnf:
+        name: flatpak
+        state: present
+      tags:
+        - flatpak
+
+    - name: Check if Flathub remote exists
+      command: flatpak remotes --user
+      register: flatpak_remotes
+      changed_when: false
+      tags:
+        - flatpak
+
+    - name: Add Flathub remote if it doesn't exist
+      command: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+      when: "'flathub' not in flatpak_remotes.stdout"
+      tags:
+        - flatpak
+
+    - name: Install Flatpak applications
+      flatpak:
+        name: "{{ item }}"
+        state: present
+        remote: flathub
+      loop: "{{ flatpak_packages }}"
+      tags:
+        - flatpak
+
+    # Install dotfiles
+
+#     - name: Source Rust environment
+#       shell: source /home/{{ username }}/.cargo/env
+#       changed_when: false
+#       tags:
+#         - dotfiles
+
+#     - name: Install Dotter
+#       become_user: "{{ ansible_user_id }}"
+#       shell: cargo install dotter
+# #      cargo:
+# #        name: dotter
+#       tags:
+#         - dotfiles
+
+#     - name: Create dotfiles directory for user
+#       file:
+#         path: "/home/{{ username }}/.dotfiles"
+#         state: directory
+#         owner: "{{ username }}"
+#         group: "{{ username }}"
+#       tags:
+#         - dotfiles
+
+#     - name: Clone dotfiles repository
+#       git:
+#         repo: https://codeberg.org/artnay/dotfiles.git
+#         dest: "/home/{{ username }}/.dotfiles"
+#         force: yes
+#       become_user: "{{ username }}"
+#       tags:
+#         - dotfiles
+
+#     - name: Deploy dotfiles with Dotter
+#       command: dotter deploy
+#       args:
+#         chdir: "/home/{{ username }}/.dotfiles"
+#       become_user: "{{ username }}"
+#       tags:
+#         - dotfiles
+
+    # GNOME desktop setup
+
+#     - name: Install GNOME Extensions CLI tool
+#       become_user: "{{ username }}"
+#       shell: pipx install gnome-extensions-cli --user
+# #      pipx:
+# #        name: gnome-extensions-cli
+# #        extra_args: --user
+#       tags:
+#         - desktop
+#         - gnome
+
+#     - name: Install GNOME Extensions
+#       become_user: "{{ username }}"
+#       command: "gnome-extensions-cli install {{ item }}"
+#       loop: "{{ gnome_extensions }}"
+#       ignore_errors: yes
+#       tags:
+#         - desktop
+#         - gnome
+
+    # - name: Set GNOME settings
+    #   become: yes
+    #   become_user: "{{ username }}"
+    #   environment:
+    #     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_uid }}/bus"
+    #   command: "{{ item }}"
+    #   with_items:
+    #     - "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'"
+    #     - "gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'"
+    #     - "gsettings set org.gnome.desktop.interface icon-theme Papirus"
+    #   tags:
+    #     - desktop
+    #     - gnome
