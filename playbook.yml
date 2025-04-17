@@ -7,18 +7,22 @@
   vars:
     username: "{{ ansible_user_id }}"
     system_packages:
+      - ansible
       - dnf-utils
       - glances
       - fzf
+      - fdupes
       - vnstat
       - vim
       - jq
       - pv
       - rclone
       - restic
+      - ripgrep
       - htop
       - nethogs
       - nmap
+      - ncdu
       - tmux
       - tmux-powerline
       - testssl
