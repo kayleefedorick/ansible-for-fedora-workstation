@@ -51,6 +51,10 @@
     desktop_packages:
       - fastfetch
       - fira-code-fonts
+      - google-noto-fonts-common
+      - google-roboto-fonts
+      - ibm-plex-fonts
+      - powerline-fonts
       - papirus-icon-theme
     flatpak_packages:
       - app.fotema.Fotema
