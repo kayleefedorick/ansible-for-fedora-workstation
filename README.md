@@ -1,8 +1,8 @@
 # Ansible for Fedora Workstation
 
-Configure and manage [Fedora](https://fedoraproject.org/) 42 Workstation using [Ansible](https://github.com/ansible/ansible) infrastructure as code. Fedora Workstation is a polished, easy to use operating system for laptop and desktop computers, with a complete set of tools for developers and makers of all kinds. Ansible is a suite of software tools that enables infrastructure as code.
+Configure and manage [Fedora](https://fedoraproject.org/) Workstation 42 using [Ansible](https://github.com/ansible/ansible) infrastructure as code. Fedora Workstation is a polished, easy to use operating system for laptop and desktop computers, with a complete set of tools for developers and makers of all kinds. Ansible is a suite of software tools that enables infrastructure as code.
 
-This repository contains IaC that automates the post-installation tasks for AMD-based x86-64 desktop computer using Fedora 42 Workstation. Tasks include the installation of RPM and Flatpak packages needed for system administration, development, leisure and gaming.
+This repository contains IaC that automates the post-installation tasks for AMD-based x86-64 desktop computer using Fedora Workstation 42. Tasks include the installation of RPM and Flatpak packages needed for system administration, development, leisure and gaming.
 
 - [Ansible for Fedora Workstation](#ansible-for-fedora-workstation)
    * [Prerequisites](#prerequisites)

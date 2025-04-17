@@ -29,6 +29,7 @@
       - zsh
     development_packages:
       - git
+      - gitui
       - golang
       - httpie
       - podman
