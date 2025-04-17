@@ -45,7 +45,7 @@
       - python3
       - uv
       - rust
-      - rustup
+      - cargo
       - shellcheck
       - yamllint
     desktop_packages:
