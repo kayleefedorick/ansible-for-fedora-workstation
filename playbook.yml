@@ -40,7 +40,7 @@
       - podman-compose
       - nodejs
       - pipx
-      - psql
+      - postgresql
       - pgcli
       - python3
       - uv
@@ -53,7 +53,7 @@
       - fira-code-fonts
       - google-noto-fonts-common
       - google-roboto-fonts
-      - ibm-plex-fonts
+      - ibm-plex-fonts-all
       - powerline-fonts
       - papirus-icon-theme
     flatpak_packages:
@@ -106,7 +106,7 @@
       - 7851  # Exchange Electricity Price Indicator
 
   tasks:
-    - name: Update all packages
+    - name: Update all RPM packages
       dnf:
         name: "*"
         state: latest
@@ -239,35 +239,40 @@
 
     # GNOME desktop setup
 
-#     - name: Install GNOME Extensions CLI tool
-#       become_user: "{{ username }}"
-#       shell: pipx install gnome-extensions-cli --user
-# #      pipx:
-# #        name: gnome-extensions-cli
-# #        extra_args: --user
-#       tags:
-#         - desktop
-#         - gnome
-
-#     - name: Install GNOME Extensions
-#       become_user: "{{ username }}"
-#       command: "gnome-extensions-cli install {{ item }}"
-#       loop: "{{ gnome_extensions }}"
-#       ignore_errors: yes
-#       tags:
-#         - desktop
-#         - gnome
-
-    # - name: Set GNOME settings
-    #   become: yes
-    #   become_user: "{{ username }}"
-    #   environment:
-    #     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_uid }}/bus"
-    #   command: "{{ item }}"
-    #   with_items:
-    #     - "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'"
-    #     - "gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'"
-    #     - "gsettings set org.gnome.desktop.interface icon-theme Papirus"
+    # - name: Install GNOME Extensions CLI tool
+    #   become: false
+    #   shell: pipx install gnome-extensions-cli --user
+    #   pipx:
+    #     name: gnome-extensions-cli
+    #     extra_args: --user
     #   tags:
     #     - desktop
     #     - gnome
+
+    # - name: Install GNOME Extensions
+    #   become: false
+    #   command: "gnome-extensions-cli install {{ item }}"
+    #   loop: "{{ gnome_extensions }}"
+    #   ignore_errors: yes
+    #   tags:
+    #     - desktop
+    #     - gnome
+
+    - name: Set GNOME settings
+      become: false
+      ansible.builtin.dconf:
+        key: "{{ item.key }}"
+        value: "{{ item.value }}"
+        state: present
+      loop:
+        - key: "/org/gnome/desktop/interface/color-scheme"
+          value: "'prefer-dark'"
+        - key: "/org/gnome/desktop/interface/icon-theme"
+          value: "'Papirus'"
+        - key: "/org/gnome/desktop/wm/preferences/button-layout"
+          value: "':minimize,maximize,close'"
+        - key: "/org/gnome/desktop/calendar/show-weekdate"
+          value: "true"
+      tags:
+        - desktop
+        - gnome
