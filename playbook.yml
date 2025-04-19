@@ -100,14 +100,14 @@
       # - org.qgis.qgis
       # - com.mitchellh.ghostty
     gnome_extensions:
-      - 2 # Frippery Move Clock
-      - 19 # User Themes
-      - 21 # Workspace Indicator
-      - 545 # Hide Top Bar
+      - 2  # Frippery Move Clock
+      - 19  # User Themes
+      - 21  # Workspace Indicator
+      - 545  # Hide Top Bar
       - 779  # Clipboard indicator
-      - 5219 # TopHat
-      - 6523 # Panel Workspace Scroll
-      - 7065 # Tiling Shell
+      - 5219  # TopHat
+      - 6523  # Panel Workspace Scroll
+      - 7065  # Tiling Shell
       - 7851  # Exchange Electricity Price Indicator
 
   tasks:
@@ -124,7 +124,7 @@
       dnf:
         name: "{{ system_packages }}"
         state: present
-        update_cache: yes
+        update_cache: true
       tags:
         - packages
         - system
@@ -133,7 +133,7 @@
       dnf:
         name: "{{ development_packages }}"
         state: present
-        update_cache: yes
+        update_cache: true
       tags:
         - packages
         - development
@@ -142,7 +142,7 @@
       dnf:
         name: "{{ desktop_packages }}"
         state: present
-        update_cache: yes
+        update_cache: true
       tags:
         - packages
         - desktop
@@ -168,7 +168,7 @@
     #   tags:
     #     - gaming
     #     - steam
-    
+
     # Flatpak setup
 
     - name: Ensure Flatpak is installed
@@ -217,7 +217,7 @@
         path: /etc/selinux/config
         regexp: '^SELINUX='
         line: 'SELINUX=enforcing'
-        backup: yes
+        backup: true
 
     - name: Get current SELinux mode
       command: getenforce
