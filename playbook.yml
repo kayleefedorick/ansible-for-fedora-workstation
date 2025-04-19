@@ -203,7 +203,7 @@
     # Security
 
     - name: Ensure SELinux packages are installed
-      yum:
+      dnf:
         name:
           - libselinux
           - libselinux-utils
