@@ -1,13 +1,13 @@
 # Ansible for Fedora Workstation
 
-Configure and manage [Fedora](https://fedoraproject.org/) Workstation 42 using [Ansible](https://github.com/ansible/ansible) infrastructure as code. Fedora Workstation is a polished, easy to use operating system for laptop and desktop computers, with a complete set of tools for developers and makers of all kinds. Ansible is a suite of software tools that enables infrastructure as code.
+Configure and manage [Fedora](https://fedoraproject.org/) Workstation 42 using [Ansible](https://github.com/ansible/ansible). Fedora Workstation is a polished, easy to use operating system for laptop and desktop computers, with a complete set of tools for developers and makers of all kinds. Ansible is a suite of software tools that enables infrastructure as code.
 
 This repository contains IaC that automates the post-installation tasks for AMD-based x86-64 desktop computer using Fedora Workstation 42. Tasks include the installation of RPM and Flatpak packages needed for system administration, development, leisure and gaming.
 
 - [Ansible for Fedora Workstation](#ansible-for-fedora-workstation)
    * [Prerequisites](#prerequisites)
    * [Preparations](#preparations)
-      + [Download and check the disk image](#download-and-check-the-disk-image)
+      + [Download ISO image directly (optional)](#download-iso-image-directly-optional)
       + [OS and Ansible Installation](#os-and-ansible-installation)
    * [Usage](#usage)
       + [Basic Commands](#basic-commands)
@@ -18,15 +18,21 @@ This repository contains IaC that automates the post-installation tasks for AMD-
 ## Prerequisites
 
 - Fedora Workstation 42 (x86-64)
-- Ansible core 2.18.3
+- Ansible (core) >= 2.18.3
 
 ## Preparations
 
-### Download and check the disk image
+There are alternative ways to obtain Fedora installation media:
 
-Download the [Fedora Workstation 42 ISO image](https://download.fedoraproject.org/pub/fedora/linux/releases/42/Workstation/x86_64/iso/Fedora-Workstation-Live-42-1.1.x86_64.iso).
+- Use Fedora Media Writer, the official, tested and supported way to make bootable media. See [Download options](https://fedoraproject.org/workstation/download)
+- Download the [ISO image using BitTorrent](https://torrent.fedoraproject.org/torrents/Fedora-Workstation-Live-x86_64-42.torrent)
+- Download the [ISO image directly](https://download.fedoraproject.org/pub/fedora/linux/releases/42/Workstation/x86_64/iso/Fedora-Workstation-Live-42-1.1.x86_64.iso)
 
-Check the hash for the downloaded image:
+### Download ISO image directly (optional)
+
+In case you decide to download the ISO image directly, check the integrity of file.
+
+Run:
 
 ```bash
 sha512sum Fedora-Workstation-Live-42-1.1.x86_64.iso
@@ -40,7 +46,7 @@ Ensure the output value:
 
 ### OS and Ansible Installation
 
-Install Fedora using previously downloaded image. After installation has finished, login and install Ansible:
+Obtain and install Fedora using one of the options above. After you have finished a fresh installation of Fedora Workstation 42, login and install Ansible:
 
 ```bash
 sudo dnf install -y ansible
@@ -87,6 +93,7 @@ ansible-playbook playbook.yml --ask-become-pass
 
 - [Ansible Community Documentation](https://docs.ansible.com/)
 - [Awesome Ansible](https://github.com/ansible-community/awesome-ansible/blob/main/README.md)
+- [Fedora Docs](https://docs.fedoraproject.org/)
 
 ## License
 
