@@ -7,6 +7,7 @@
   vars:
     username: "{{ ansible_user_id }}"
     system_packages:
+      - "@virtualization"
       - ansible
       - dnf-utils
       - glances
@@ -27,6 +28,7 @@
       - ncdu
       - nnn
       - nvtop
+      - neovim
       - tmux
       - tmux-powerline
       - testssl
@@ -34,8 +36,10 @@
       - ps_mem
       - zoxide
       - whois
+      - wireguard-tools
       - zsh
     development_packages:
+      - "@development-tools"
       - git
       - gitui
       - golang
@@ -48,6 +52,7 @@
       - pgcli
       - python3
       - pnpm
+      - pre-commit
       - uv
       - rust
       - cargo
