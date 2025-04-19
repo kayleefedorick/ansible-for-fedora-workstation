@@ -47,6 +47,7 @@
       - postgresql
       - pgcli
       - python3
+      - pnpm
       - uv
       - rust
       - cargo
