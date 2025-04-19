@@ -14,8 +14,10 @@
       - fdupes
       - vnstat
       - vim
+      - vifm
       - jq
       - pv
+      - procs
       - rclone
       - restic
       - ripgrep
@@ -23,6 +25,8 @@
       - nethogs
       - nmap
       - ncdu
+      - nnn
+      - nvtop
       - tmux
       - tmux-powerline
       - testssl
