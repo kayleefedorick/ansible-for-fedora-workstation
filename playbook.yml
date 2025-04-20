@@ -79,12 +79,15 @@
       - com.github.qarmin.czkawka
       - com.rafaelmardojai.Blanket
       - de.haeckerfelix.Shortwave
+      - de.haeckerfelix.Fragments
       - dev.geopjr.Tuba
       - im.riot.Riot
       - io.missioncenter.MissionCenter
       - io.podman_desktop.PodmanDesktop
       - io.freetubeapp.FreeTube
       - io.github.seadve.Mousai
+      - io.github.ungoogled_software.ungoogled_chromium
+      - io.gitlab.librewolf-community
       - net.poedit.Poedit
       - net.displaycal.DisplayCAL
       - org.mozilla.firefox
@@ -92,6 +95,7 @@
       - org.gimp.GIMP
       - org.gnome.SoundRecorder
       - org.gnome.meld
+      - org.gnome.Epiphany
       - org.videolan.VLC
       - org.libreoffice.LibreOffice
       - org.signal.Signal
