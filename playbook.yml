@@ -9,6 +9,7 @@
     system_packages:
       - "@virtualization"
       - ansible
+      - borgbackup
       - dnf-utils
       - glances
       - fzf
@@ -16,11 +17,13 @@
       - vnstat
       - vim
       - vifm
+      - visidata
       - jq
       - pv
       - procs
       - rclone
       - restic
+      - rsync
       - ripgrep
       - htop
       - nethogs
@@ -107,19 +110,29 @@
       - org.gaphor.Gaphor
       - org.pgadmin.pgadmin4
       - org.libretro.RetroArch
+      - org.stellarium.Stellarium
       - re.sonny.Junction
       # - org.qgis.qgis
       # - com.mitchellh.ghostty
     gnome_extensions:
-      - 2  # Frippery Move Clock
-      - 19  # User Themes
-      - 21  # Workspace Indicator
-      - 545  # Hide Top Bar
-      - 779  # Clipboard indicator
-      - 5219  # TopHat
-      - 6523  # Panel Workspace Scroll
-      - 7065  # Tiling Shell
-      - 7851  # Exchange Electricity Price Indicator
+      - Move_Clock@rmy.pobox.com
+      - user-theme@gnome-shell-extensions.gcampax.github.com
+      - workspace-indicator@gnome-shell-extensions.gcampax.github.com
+      - hidetopbar@mathieu.bidon.ca
+      - clipboard-indicator@tudmotu.com
+      - tophat@fflewddur.github.io
+      - panel-workspace-scroll@polymeilex.github.io
+      - tilingshell@ferrarodomenico.com
+      - exchange-electricity-price-indicator@artnay.codeberg.org
+      # - 2  # Frippery Move Clock
+      # - 19  # User Themes
+      # - 21  # Workspace Indicator
+      # - 545  # Hide Top Bar
+      # - 779  # Clipboard indicator
+      # - 5219  # TopHat
+      # - 6523  # Panel Workspace Scroll
+      # - 7065  # Tiling Shell
+      # - 7851  # Exchange Electricity Price Indicator
 
 
   pre_tasks:
@@ -131,13 +144,6 @@
         - always
 
   tasks:
-    - name: Print distribution details
-      debug: msg="{{ item }}"
-      with_items:
-        - "{{ ansible_distribution }}"
-        - "{{ ansible_distribution_version }}"
-        - "{{ ansible_distribution_major_version }}"
-
     - name: Update all RPM packages
       dnf:
         name: "*"
@@ -322,24 +328,55 @@
 
     # GNOME desktop setup
 
-    # - name: Install GNOME Extensions CLI tool
-    #   become: false
-    #   shell: pipx install gnome-extensions-cli --user
-    #   pipx:
-    #     name: gnome-extensions-cli
-    #     extra_args: --user
-    #   tags:
-    #     - desktop
-    #     - gnome
+    #  https://pypi.org/project/gnome-extensions-cli/
+    - name: Check if gnome-extensions-cli is installed
+      become: false
+      ansible.builtin.shell: pipx list | grep gnome-extensions-cli
+      register: gnome_extensions_cli_check
+      changed_when: false
+      failed_when: false
+      tags:
+        - desktop
+        - gnome
 
-    # - name: Install GNOME Extensions
-    #   become: false
-    #   command: "gnome-extensions-cli install {{ item }}"
-    #   loop: "{{ gnome_extensions }}"
-    #   ignore_errors: yes
-    #   tags:
-    #     - desktop
-    #     - gnome
+    - name: Install GNOME Extensions CLI tool
+      become: false
+      ansible.builtin.shell: pipx install gnome-extensions-cli
+      when: gnome_extensions_cli_check.rc != 0
+      tags:
+        - desktop
+        - gnome
+
+    - name: Get installed GNOME extensions
+      become: false
+      ansible.builtin.shell: gnome-extensions-cli list
+      register: installed_extensions
+      changed_when: false
+      tags:
+        - desktop
+        - gnome
+
+    - name: Install GNOME Extensions
+      become: false
+      ansible.builtin.shell: gnome-extensions-cli install {{ item }}
+      loop: "{{ gnome_extensions }}"
+      when: item | string not in installed_extensions.stdout
+      register: extension_install
+      failed_when:
+        - extension_install.rc != 0
+        - "'is already installed' not in extension_install.stderr"
+      tags:
+        - desktop
+        - gnome
+
+    - name: Enable GNOME Extensions
+      become: false
+      ansible.builtin.shell: gnome-extensions-cli enable {{ item }}
+      loop: "{{ gnome_extensions }}"
+      ignore_errors: true
+      tags:
+        - desktop
+        - gnome
 
     - name: Set GNOME settings
       become: false
@@ -352,10 +389,20 @@
           value: "'prefer-dark'"
         - key: "/org/gnome/desktop/interface/icon-theme"
           value: "'Papirus'"
+        - key: "/org/gnome/desktop/interface/accent-color"
+          value: "'green'"
+        - key: "/org/gnome/desktop/interface/clock-show-weekday"
+          value: "true"
         - key: "/org/gnome/desktop/wm/preferences/button-layout"
           value: "':minimize,maximize,close'"
         - key: "/org/gnome/desktop/calendar/show-weekdate"
           value: "true"
+        - key: "/org/gnome/desktop/sound/event-sounds"
+          value: "false"
+        - key: "/org/gnome/settings-daemon/plugins/color/night-light-enabled"
+          value: "true"
+        - key: "/org/gnome/settings-daemon/plugins/color/night-light-temperature"
+          value: "3500"
       tags:
         - desktop
         - gnome
