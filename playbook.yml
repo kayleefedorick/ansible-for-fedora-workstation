@@ -121,7 +121,23 @@
       - 7065  # Tiling Shell
       - 7851  # Exchange Electricity Price Indicator
 
+
+  pre_tasks:
+    - name: Check if running on Fedora 42
+      fail:
+        msg: "This playbook only runs on Fedora 42. Current distribution: {{ ansible_distribution }} {{ ansible_distribution_version }}"
+      when: ansible_distribution != 'Fedora' or ansible_distribution_version != '42'
+      tags:
+        - always
+
   tasks:
+    - name: Print distribution details
+      debug: msg="{{ item }}"
+      with_items:
+        - "{{ ansible_distribution }}"
+        - "{{ ansible_distribution_version }}"
+        - "{{ ansible_distribution_major_version }}"
+
     - name: Update all RPM packages
       dnf:
         name: "*"
