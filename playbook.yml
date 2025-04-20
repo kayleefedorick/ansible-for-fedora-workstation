@@ -88,6 +88,8 @@
       - io.github.seadve.Mousai
       - io.github.ungoogled_software.ungoogled_chromium
       - io.gitlab.librewolf-community
+      - io.dbeaver.DBeaverCommunity
+      - io.gitlab.adhami3310.Impression
       - net.poedit.Poedit
       - net.displaycal.DisplayCAL
       - org.mozilla.firefox
