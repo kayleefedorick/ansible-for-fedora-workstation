@@ -1,0 +1,39 @@
+---
+- name: Ensure SELinux packages are installed
+  dnf:
+    name:
+      - libselinux
+      - libselinux-utils
+      - libsemanage
+      - policycoreutils
+      - policycoreutils-python-utils
+    state: present
+  tags:
+    - security
+
+- name: Ensure SELinux is set to enforcing in config
+  lineinfile:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: 'SELINUX=enforcing'
+    backup: true
+  tags:
+    - security
+
+- name: Get current SELinux mode
+  command: getenforce
+  register: selinux_mode
+  changed_when: false
+  ignore_errors: true
+  tags:
+    - security
+
+- name: Enable SELinux enforcing mode if not already enabled
+  command: setenforce 1
+  when: selinux_mode.stdout != "Enforcing"
+  ignore_errors: true
+  tags:
+    - security
+
+# FIXME:
+# Install OpenSnitch and VPN

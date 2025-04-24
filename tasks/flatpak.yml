@@ -1,0 +1,29 @@
+---
+- name: Ensure Flatpak is installed
+  dnf:
+    name: flatpak
+    state: present
+  tags:
+    - flatpak
+
+- name: Check if Flathub remote exists
+  command: flatpak remotes --user
+  register: flatpak_remotes
+  changed_when: false
+  tags:
+    - flatpak
+
+- name: Add Flathub remote if it doesn't exist
+  command: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+  when: "'flathub' not in flatpak_remotes.stdout"
+  tags:
+    - flatpak
+
+- name: Install Flatpak applications
+  flatpak:
+    name: "{{ item }}"
+    state: present
+    remote: flathub
+  loop: "{{ flatpak_packages }}"
+  tags:
+    - flatpak

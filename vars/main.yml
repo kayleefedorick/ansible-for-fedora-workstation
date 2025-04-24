@@ -1,0 +1,145 @@
+---
+username: "{{ ansible_user_id }}"
+
+system_packages:
+  - "@virtualization"
+  - ansible
+  - borgbackup
+  - dnf-utils
+  - glances
+  - fzf
+  - fdupes
+  - vnstat
+  - vim
+  - vifm
+  - visidata
+  - jq
+  - pv
+  - procs
+  - rclone
+  - restic
+  - rsync
+  - ripgrep
+  - htop
+  - nethogs
+  - nmap
+  - ncdu
+  - nnn
+  - nvtop
+  - neovim
+  - tmux
+  - tmux-powerline
+  - testssl
+  - powerline
+  - ps_mem
+  - zoxide
+  - whois
+  - wireguard-tools
+  - zsh
+
+development_packages:
+  - "@development-tools"
+  - git
+  - gitui
+  - golang
+  - httpie
+  - podman
+  - podman-compose
+  - nodejs
+  - pipx
+  - postgresql
+  - pgcli
+  - python3
+  - pnpm
+  - pre-commit
+  - uv
+  - rust
+  - cargo
+  - shellcheck
+  - yamllint
+
+desktop_packages:
+  - fastfetch
+  - fira-code-fonts
+  - google-noto-fonts-common
+  - google-roboto-fonts
+  - ibm-plex-fonts-all
+  - powerline-fonts
+  - papirus-icon-theme
+
+flatpak_packages:
+  - app.fotema.Fotema
+  - app.drey.Dialect
+  - app.devsuite.Ptyxis
+  - com.vscodium.codium
+  - com.spotify.Client
+  - com.valvesoftware.Steam
+  - com.github.tchx84.Flatseal
+  - com.mattjakeman.ExtensionManager
+  - com.usebruno.Bruno
+  - com.github.qarmin.czkawka
+  - com.rafaelmardojai.Blanket
+  - de.haeckerfelix.Shortwave
+  - de.haeckerfelix.Fragments
+  - dev.geopjr.Tuba
+  - im.riot.Riot
+  - io.missioncenter.MissionCenter
+  - io.podman_desktop.PodmanDesktop
+  - io.freetubeapp.FreeTube
+  - io.github.seadve.Mousai
+  - io.github.ungoogled_software.ungoogled_chromium
+  - io.gitlab.librewolf-community
+  - io.dbeaver.DBeaverCommunity
+  - io.gitlab.adhami3310.Impression
+  - net.poedit.Poedit
+  - net.displaycal.DisplayCAL
+  - org.mozilla.firefox
+  - org.mozilla.Thunderbird
+  - org.gimp.GIMP
+  - org.gnome.SoundRecorder
+  - org.gnome.meld
+  - org.gnome.Epiphany
+  - org.videolan.VLC
+  - org.libreoffice.LibreOffice
+  - org.signal.Signal
+  - org.keepassxc.KeePassXC
+  - org.gnome.World.PikaBackup
+  - org.gnome.gitlab.somas.Apostrophe
+  - org.gaphor.Gaphor
+  - org.pgadmin.pgadmin4
+  - org.libretro.RetroArch
+  - org.stellarium.Stellarium
+  - re.sonny.Junction
+  # - org.qgis.qgis
+  # - com.mitchellh.ghostty
+
+gnome_extensions:
+  - Move_Clock@rmy.pobox.com
+  - user-theme@gnome-shell-extensions.gcampax.github.com
+  - workspace-indicator@gnome-shell-extensions.gcampax.github.com
+  - hidetopbar@mathieu.bidon.ca
+  - clipboard-indicator@tudmotu.com
+  - tophat@fflewddur.github.io
+  - panel-workspace-scroll@polymeilex.github.io
+  - tilingshell@ferrarodomenico.com
+  - exchange-electricity-price-indicator@artnay.codeberg.org
+
+gnome_settings:
+  - key: "/org/gnome/desktop/interface/color-scheme"
+    value: "'prefer-dark'"
+  - key: "/org/gnome/desktop/interface/icon-theme"
+    value: "'Papirus'"
+  - key: "/org/gnome/desktop/interface/accent-color"
+    value: "'green'"
+  - key: "/org/gnome/desktop/interface/clock-show-weekday"
+    value: "true"
+  - key: "/org/gnome/desktop/wm/preferences/button-layout"
+    value: "':minimize,maximize,close'"
+  - key: "/org/gnome/desktop/calendar/show-weekdate"
+    value: "true"
+  - key: "/org/gnome/desktop/sound/event-sounds"
+    value: "false"
+  - key: "/org/gnome/settings-daemon/plugins/color/night-light-enabled"
+    value: "true"
+  - key: "/org/gnome/settings-daemon/plugins/color/night-light-temperature"
+    value: "3500"

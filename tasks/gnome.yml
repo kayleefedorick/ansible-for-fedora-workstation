@@ -1,0 +1,61 @@
+---
+#  https://pypi.org/project/gnome-extensions-cli/
+- name: Check if gnome-extensions-cli is installed
+  become: false
+  ansible.builtin.shell: pipx list | grep gnome-extensions-cli
+  register: gnome_extensions_cli_check
+  changed_when: false
+  failed_when: false
+  tags:
+    - desktop
+    - gnome
+
+- name: Install GNOME Extensions CLI tool
+  become: false
+  ansible.builtin.shell: pipx install gnome-extensions-cli
+  when: gnome_extensions_cli_check.rc != 0
+  tags:
+    - desktop
+    - gnome
+
+- name: Get installed GNOME extensions
+  become: false
+  ansible.builtin.shell: gnome-extensions-cli list
+  register: installed_extensions
+  changed_when: false
+  tags:
+    - desktop
+    - gnome
+
+- name: Install GNOME Extensions
+  become: false
+  ansible.builtin.shell: gnome-extensions-cli install {{ item }}
+  loop: "{{ gnome_extensions }}"
+  when: item | string not in installed_extensions.stdout
+  register: extension_install
+  failed_when:
+    - extension_install.rc != 0
+    - "'is already installed' not in extension_install.stderr"
+  tags:
+    - desktop
+    - gnome
+
+- name: Enable GNOME Extensions
+  become: false
+  ansible.builtin.shell: gnome-extensions-cli enable {{ item }}
+  loop: "{{ gnome_extensions }}"
+  ignore_errors: true
+  tags:
+    - desktop
+    - gnome
+
+- name: Set GNOME settings
+  become: false
+  ansible.builtin.dconf:
+    key: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop: "{{ gnome_settings }}"
+  tags:
+    - desktop
+    - gnome

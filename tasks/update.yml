@@ -1,0 +1,7 @@
+---
+- name: Update all RPM packages
+  dnf:
+    name: "*"
+    state: latest
+  tags:
+    - update

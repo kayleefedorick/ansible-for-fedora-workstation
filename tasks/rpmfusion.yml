@@ -1,0 +1,40 @@
+---
+- name: Import RPM Fusion Free GPG key
+  ansible.builtin.rpm_key:
+    #  https://rpmfusion.org/keys
+    key: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-2020
+    state: present
+  tags:
+    - rpmfusion
+
+- name: Import RPM Fusion Nonfree GPG key
+  ansible.builtin.rpm_key:
+    #  https://rpmfusion.org/keys
+    key: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-nonfree-fedora-2020
+    state: present
+  tags:
+    - rpmfusion
+
+- name: Enable RPM Fusion Free repository
+  dnf:
+    name: "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ ansible_distribution_version }}.noarch.rpm"
+    state: present
+    disable_gpg_check: false
+  tags:
+    - rpmfusion
+
+- name: Enable RPM Fusion Nonfree repository
+  dnf:
+    name: "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_distribution_version }}.noarch.rpm"
+    state: present
+    disable_gpg_check: false
+  tags:
+    - rpmfusion
+
+# - name: Install Steam from RPM Fusion
+#   dnf:
+#     name: steam
+#     state: present
+#   tags:
+#     - gaming
+#     - steam
