@@ -46,6 +46,7 @@ development_packages:
   - podman
   - podman-compose
   - nodejs
+  - opentofu
   - pipx
   - postgresql
   - pgcli
