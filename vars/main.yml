@@ -68,6 +68,16 @@ desktop_packages:
   - powerline-fonts
   - papirus-icon-theme
 
+rpmfusion_packages:
+  - gstreamer1-plugins-bad-freeworld
+  - gstreamer1-plugins-ugly
+  - libavcodec-freeworld
+  - libheif-freeworld
+  - mesa-va-drivers-freeworld
+  - mesa-vdpau-drivers-freeworld
+  - mesa-vulkan-drivers-freeworld
+  - steam-devices
+
 flatpak_packages:
   - app.fotema.Fotema
   - app.drey.Dialect
