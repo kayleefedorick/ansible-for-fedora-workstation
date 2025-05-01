@@ -41,6 +41,7 @@ development_packages:
   - "@development-tools"
   - git
   - gitui
+  - git-lfs
   - golang
   - httpie
   - podman
@@ -50,6 +51,7 @@ development_packages:
   - pipx
   - postgresql
   - pgcli
+  - pgmodeler
   - python3
   - pnpm
   - pre-commit
