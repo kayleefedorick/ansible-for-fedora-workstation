@@ -6,7 +6,9 @@ system_packages:
   - ansible
   - borgbackup
   - dnf-utils
+  - duf
   - glances
+  - gdu
   - fzf
   - fdupes
   - vnstat
