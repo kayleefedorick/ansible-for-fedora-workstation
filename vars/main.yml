@@ -62,6 +62,7 @@ development_packages:
   - cargo
   - shellcheck
   - yamllint
+  - reuse
 
 desktop_packages:
   - fastfetch
