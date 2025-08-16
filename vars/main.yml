@@ -98,6 +98,7 @@ flatpak_packages:
   - de.haeckerfelix.Shortwave
   - de.haeckerfelix.Fragments
   - dev.geopjr.Tuba
+  - dev.geopjr.Collision
   - im.riot.Riot
   - io.missioncenter.MissionCenter
   - io.podman_desktop.PodmanDesktop
@@ -109,6 +110,7 @@ flatpak_packages:
   - io.gitlab.adhami3310.Impression
   - net.poedit.Poedit
   - net.displaycal.DisplayCAL
+  - nl.hjdskes.gcolor3
   - org.mozilla.firefox
   - org.mozilla.Thunderbird
   - org.gimp.GIMP
@@ -125,9 +127,25 @@ flatpak_packages:
   - org.pgadmin.pgadmin4
   - org.libretro.RetroArch
   - org.stellarium.Stellarium
+  - org.gnome.Builder
+  - org.gnome.design.Contrast
+  - org.jupyter.JupyterLab
+  - org.gustavoperedo.FontDownloader
   - re.sonny.Junction
   # - org.qgis.qgis
   # - com.mitchellh.ghostty
+  # - com.github.rafostar.Clapper
+  # - io.gitlab.gregorni.Letterpress
+  # - io.github.josephmawa.SpellingBee
+  # - io.unobserved.furtherance
+  # - io.gitlab.news_flash.NewsFlash
+  # - com.jgraph.drawio.desktop
+  # - org.nmap.Zenmap
+  # - io.github.bytezz.IPLookup
+  # - io.github.vikdevelop.SaveDesktop
+  # - org.virt_manager.virt-manager
+  # - io.github.zefr0x.hashes
+  # - net.portswigger.BurpSuite-Community
 
 gnome_extensions:
   - Move_Clock@rmy.pobox.com
