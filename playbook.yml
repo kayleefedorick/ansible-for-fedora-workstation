@@ -1,16 +1,16 @@
 ---
-# Fedora Workstation 42 Ansible Playbook
-- name: Setup Fedora Workstation 42
+# Fedora Workstation 43 Ansible Playbook
+- name: Setup Fedora Workstation 43
   hosts: localhost
   become: true
   vars_files:
     - vars/main.yml
 
   pre_tasks:
-    - name: Check if running on Fedora 42
+    - name: Check if running on Fedora 43
       fail:
-        msg: "This playbook only runs on Fedora 42. Current distribution: {{ ansible_distribution }} {{ ansible_distribution_version }}"
-      when: ansible_distribution != 'Fedora' or ansible_distribution_version != '42'
+        msg: "This playbook only runs on Fedora 43. Current distribution: {{ ansible_distribution }} {{ ansible_distribution_version }}"
+      when: ansible_distribution != 'Fedora' or ansible_distribution_version != '43'
       tags:
         - always
 

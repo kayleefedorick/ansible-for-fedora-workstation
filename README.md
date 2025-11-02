@@ -1,8 +1,8 @@
 # Ansible for Fedora Workstation
 
-Configure and manage [Fedora](https://fedoraproject.org/) Workstation 42 using [Ansible](https://github.com/ansible/ansible). Fedora Workstation is a polished, easy to use operating system for laptop and desktop computers, with a complete set of tools for developers and makers of all kinds. Ansible is a suite of software tools that enables infrastructure as code.
+Configure and manage [Fedora](https://fedoraproject.org/) Workstation 43 using [Ansible](https://github.com/ansible/ansible). Fedora Workstation is a polished, easy to use operating system for laptop and desktop computers, with a complete set of tools for developers and makers of all kinds. Ansible is a suite of software tools that enables infrastructure as code.
 
-This repository contains IaC that automates the post-installation tasks for AMD-based x86-64 desktop computer using Fedora Workstation 42. Tasks include the installation of RPM and Flatpak packages needed for system administration, development, leisure and gaming.
+This repository contains IaC that automates the post-installation tasks for AMD-based x86-64 desktop computer using Fedora Workstation 43. Tasks include the installation of RPM and Flatpak packages needed for system administration, development, leisure and gaming.
 
 - [Ansible for Fedora Workstation](#ansible-for-fedora-workstation)
    * [Prerequisites](#prerequisites)
@@ -17,16 +17,16 @@ This repository contains IaC that automates the post-installation tasks for AMD-
 
 ## Prerequisites
 
-- Fedora Workstation 42 (x86-64)
-- Ansible (core) >= 2.18.3
+- Fedora Workstation 43 (x86-64)
+- Ansible (core) >= 2.18.9
 
 ## Preparations
 
 There are alternative ways to obtain Fedora installation media:
 
 - Use Fedora Media Writer, the official, tested and supported way to make bootable media. See [Download options](https://fedoraproject.org/workstation/download)
-- Download the [ISO image using BitTorrent](https://torrent.fedoraproject.org/torrents/Fedora-Workstation-Live-x86_64-42.torrent)
-- Download the [ISO image directly](https://download.fedoraproject.org/pub/fedora/linux/releases/42/Workstation/x86_64/iso/Fedora-Workstation-Live-42-1.1.x86_64.iso)
+- Download the [ISO image using BitTorrent](https://torrent.fedoraproject.org/torrents/Fedora-Workstation-Live-x86_64-43.torrent)
+- Download the [ISO image directly](https://download.fedoraproject.org/pub/fedora/linux/releases/43/Workstation/x86_64/iso/Fedora-Workstation-Live-43-1.6.x86_64.iso)
 
 ### Download ISO image directly (optional)
 
@@ -35,18 +35,18 @@ In case you decide to download the ISO image directly, check the integrity of fi
 Run:
 
 ```bash
-sha512sum Fedora-Workstation-Live-42-1.1.x86_64.iso
+sha256sum Fedora-Workstation-Live-43-1.6.x86_64.iso
 ```
 
 Ensure the output value:
 
 ```bash
-8af5430c8596a2d540cf0ece6c2b823b714ca436ab4b859b111c7d1ffe5e88f970415f52b6c4a4bf19ecd6aa4e64ea35775269496f443ede7d654e292b52239e
+2a4a16c009244eb5ab2198700eb04103793b62407e8596f30a3e0cc8ac294d77
 ```
 
 ### OS and Ansible Installation
 
-Obtain and install Fedora using one of the options above. After you have finished a fresh installation of Fedora Workstation 42, login and install Ansible:
+Obtain and install Fedora using one of the options above. After you have finished a fresh installation of Fedora Workstation 43, login and install Ansible:
 
 ```bash
 sudo dnf install -y ansible
