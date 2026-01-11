@@ -77,6 +77,11 @@ gnome_settings:
   # --- Clock format ---
   - key: "/org/gnome/desktop/interface/clock-format"
     value: "'12h'"
+  # --- Wallpaper ---
+  - key: "/org/gnome/desktop/background/picture-uri"
+    value: "'file:///usr/share/backgrounds/gnome/sheet-l.jxl'"
+  - key: "/org/gnome/desktop/background/picture-uri-dark"
+    value: "'file:///usr/share/backgrounds/gnome/sheet-d.jxl'"
 # Key Bindings
   # --- Launchers ---
   - key: "/org/gnome/settings-daemon/plugins/media-keys/home"
