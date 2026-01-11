@@ -4,176 +4,97 @@ username: "{{ ansible_user_id }}"
 system_packages:
   - "@virtualization"
   - ansible
-  - borgbackup
+  - bat
+  - dconf-editor
   - dnf-utils
   - duf
-  - glances
-  - gdu
+  - fish
   - fzf
-  - fdupes
-  - vnstat
-  - vim
-  - vifm
-  - visidata
-  - jq
-  - pv
-  - procs
+  - htop
+  - kitty
+  - micro
   - rclone
   - restic
   - rsync
-  - ripgrep
-  - htop
-  - nethogs
-  - nmap
-  - ncdu
-  - nnn
-  - nvtop
-  - neovim
-  - tmux
-  - tmux-powerline
-  - testssl
-  - powerline
-  - ps_mem
-  - zoxide
   - whois
   - wireguard-tools
   - zsh
 
 development_packages:
   - "@development-tools"
+  - kicad
   - git
-  - gitui
-  - git-lfs
-  - golang
-  - httpie
-  - podman
-  - podman-compose
-  - nodejs
-  - opentofu
   - pipx
-  - postgresql
-  - pgcli
-  - pgmodeler
   - python3
-  - pnpm
+  - python3-psutil
   - pre-commit
-  - uv
   - rust
   - cargo
-  - shellcheck
-  - yamllint
-  - reuse
+  - cmake
 
 desktop_packages:
   - fastfetch
-  - fira-code-fonts
-  - google-noto-fonts-common
-  - google-roboto-fonts
-  - ibm-plex-fonts-all
-  - powerline-fonts
-  - papirus-icon-theme
+  - hyfetch
 
-rpmfusion_packages:
-  - gstreamer1-plugins-bad-freeworld
-  - gstreamer1-plugins-ugly
-  - libavcodec-freeworld
-  - libheif-freeworld
-  - mesa-va-drivers-freeworld
-  - mesa-vdpau-drivers-freeworld
-  - mesa-vulkan-drivers-freeworld
-  - steam-devices
+#rpmfusion_packages:
+#  - gstreamer1-plugins-bad-freeworld
+#  - gstreamer1-plugins-ugly
+#  - libavcodec-freeworld
+#  - libheif-freeworld
+#  - mesa-va-drivers-freeworld
+#  - mesa-vdpau-drivers-freeworld
+#  - mesa-vulkan-drivers-freeworld
 
 flatpak_packages:
-  - app.fotema.Fotema
-  - app.drey.Dialect
-  - app.devsuite.Ptyxis
-  - com.vscodium.codium
+  - com.bitwarden.desktop
   - com.spotify.Client
-  - com.valvesoftware.Steam
-  - com.github.tchx84.Flatseal
-  - com.mattjakeman.ExtensionManager
-  - com.usebruno.Bruno
-  - com.github.qarmin.czkawka
-  - com.rafaelmardojai.Blanket
-  - de.haeckerfelix.Shortwave
-  - de.haeckerfelix.Fragments
-  - dev.geopjr.Tuba
-  - dev.geopjr.Collision
-  - im.riot.Riot
-  - io.missioncenter.MissionCenter
-  - io.podman_desktop.PodmanDesktop
-  - io.freetubeapp.FreeTube
-  - io.github.seadve.Mousai
-  - io.github.ungoogled_software.ungoogled_chromium
-  - io.gitlab.librewolf-community
-  - io.dbeaver.DBeaverCommunity
-  - io.gitlab.adhami3310.Impression
-  - net.poedit.Poedit
-  - net.displaycal.DisplayCAL
-  - nl.hjdskes.gcolor3
+  - com.visualstudio.code
+  - org.freecad.FreeCAD
   - org.mozilla.firefox
   - org.mozilla.Thunderbird
   - org.gimp.GIMP
-  - org.gnome.SoundRecorder
-  - org.gnome.meld
-  - org.gnome.Epiphany
-  - org.videolan.VLC
-  - org.libreoffice.LibreOffice
-  - org.signal.Signal
-  - org.keepassxc.KeePassXC
-  - org.gnome.World.PikaBackup
-  - org.gnome.gitlab.somas.Apostrophe
-  - org.gaphor.Gaphor
-  - org.pgadmin.pgadmin4
-  - org.libretro.RetroArch
-  - org.stellarium.Stellarium
-  - org.gnome.Builder
-  - org.gnome.design.Contrast
-  - org.jupyter.JupyterLab
-  - org.gustavoperedo.FontDownloader
-  - re.sonny.Junction
-  # - org.qgis.qgis
-  # - com.mitchellh.ghostty
-  # - com.github.rafostar.Clapper
-  # - io.gitlab.gregorni.Letterpress
-  # - io.github.josephmawa.SpellingBee
-  # - io.unobserved.furtherance
-  # - io.gitlab.news_flash.NewsFlash
-  # - com.jgraph.drawio.desktop
-  # - org.nmap.Zenmap
-  # - io.github.bytezz.IPLookup
-  # - io.github.vikdevelop.SaveDesktop
-  # - org.virt_manager.virt-manager
-  # - io.github.zefr0x.hashes
-  # - net.portswigger.BurpSuite-Community
+  - org.videolan.vlc
 
 gnome_extensions:
-  - Move_Clock@rmy.pobox.com
   - user-theme@gnome-shell-extensions.gcampax.github.com
-  - workspace-indicator@gnome-shell-extensions.gcampax.github.com
-  - hidetopbar@mathieu.bidon.ca
   - clipboard-indicator@tudmotu.com
   - tophat@fflewddur.github.io
   - panel-workspace-scroll@polymeilex.github.io
   - tilingshell@ferrarodomenico.com
-  - exchange-electricity-price-indicator@artnay.codeberg.org
 
 gnome_settings:
   - key: "/org/gnome/desktop/interface/color-scheme"
     value: "'prefer-dark'"
-  - key: "/org/gnome/desktop/interface/icon-theme"
-    value: "'Papirus'"
   - key: "/org/gnome/desktop/interface/accent-color"
-    value: "'green'"
-  - key: "/org/gnome/desktop/interface/clock-show-weekday"
-    value: "true"
-  - key: "/org/gnome/desktop/wm/preferences/button-layout"
-    value: "':minimize,maximize,close'"
-  - key: "/org/gnome/desktop/calendar/show-weekdate"
-    value: "true"
-  - key: "/org/gnome/desktop/sound/event-sounds"
-    value: "false"
+    value: "'purple'"
   - key: "/org/gnome/settings-daemon/plugins/color/night-light-enabled"
     value: "true"
   - key: "/org/gnome/settings-daemon/plugins/color/night-light-temperature"
     value: "3500"
+# Key Bindings
+  # --- Launchers ---
+  - key: "/org/gnome/settings-daemon/plugins/media-keys/home"
+    value: "['<Super>f']"
+  - key: "/org/gnome/settings-daemon/plugins/media-keys/www"
+    value: "['<Super>b']"
+  # --- Window management ---
+  - key: "/org/gnome/desktop/wm/keybindings/close"
+    value: "['<Super>q']"
+  # --- Switch to workspaces ---
+  - key: "/org/gnome/desktop/wm/keybindings/switch-to-workspace-1"
+    value: "['<Super>1']"
+  - key: "/org/gnome/desktop/wm/keybindings/switch-to-workspace-2"
+    value: "['<Super>2']"
+  - key: "/org/gnome/desktop/wm/keybindings/switch-to-workspace-3"
+    value: "['<Super>3']"
+  - key: "/org/gnome/desktop/wm/keybindings/switch-to-workspace-4"
+    value: "['<Super>4']"
+  # --- Move window to workspace ---
+  - key: "/org/gnome/desktop/wm/keybindings/move-to-workspace-1"
+    value: "['<Shift><Super>1']"
+  - key: "/org/gnome/desktop/wm/keybindings/move-to-workspace-2"
+    value: "['<Shift><Super>2']"
+  - key: "/org/gnome/desktop/wm/keybindings/move-to-workspace-3"
+    value: "['<Shift><Super>3']"
+  - key: "/org/gnome/desktop/wm/keybindings/move-to-workspace-4"
+    value: "['<Shift><Super>4']"
