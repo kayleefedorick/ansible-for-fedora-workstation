@@ -36,14 +36,14 @@ desktop_packages:
   - fastfetch
   - hyfetch
 
-#rpmfusion_packages:
-#  - gstreamer1-plugins-bad-freeworld
-#  - gstreamer1-plugins-ugly
-#  - libavcodec-freeworld
-#  - libheif-freeworld
-#  - mesa-va-drivers-freeworld
-#  - mesa-vdpau-drivers-freeworld
-#  - mesa-vulkan-drivers-freeworld
+rpmfusion_packages:
+  - gstreamer1-plugins-bad-freeworld
+  - gstreamer1-plugins-ugly
+  - libavcodec-freeworld
+  - libheif-freeworld
+  - mesa-va-drivers-freeworld
+  - mesa-vdpau-drivers-freeworld
+  - mesa-vulkan-drivers-freeworld
 
 flatpak_packages:
   - com.bitwarden.desktop
