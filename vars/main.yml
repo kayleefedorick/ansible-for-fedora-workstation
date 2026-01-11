@@ -4,6 +4,7 @@ username: "{{ ansible_user_id }}"
 system_packages:
   - "@virtualization"
   - ansible
+  - alacritty
   - bat
   - dconf-editor
   - dnf-utils
@@ -11,7 +12,6 @@ system_packages:
   - fish
   - fzf
   - htop
-  - kitty
   - micro
   - rclone
   - restic
@@ -91,7 +91,7 @@ gnome_settings:
       'org.freecad.FreeCAD.desktop',
       'org.kicad.kicad.desktop',
       'org.gnome.Calculator.desktop',
-      'kitty.desktop',
+      'Alacritty.desktop',
       'org.gnome.Nautilus.desktop',
       'org.gnome.Settings.desktop'
     ]"
@@ -104,22 +104,22 @@ gnome_settings:
   # --- Custom keybindings list ---
   - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
     value: "[
-      '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kitty/',
-      '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kitty-micro/'
+      '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty/',
+      '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty-micro/'
     ]"
-  # --- Custom: Launch kitty ---
-  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kitty/name"
-    value: "'Kitty'"
-  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kitty/command"
-    value: "'kitty'"
-  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kitty/binding"
+  # --- Custom: Launch alacritty ---
+  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty/name"
+    value: "'Alacritty'"
+  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty/command"
+    value: "'alacritty'"
+  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty/binding"
     value: "'<Super>Return'"
-  # --- Custom: Launch kitty with micro ---
-  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kitty-micro/name"
-    value: "'Kitty Micro'"
-  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kitty-micro/command"
-    value: "'kitty -e micro'"
-  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kitty-micro/binding"
+  # --- Custom: Launch micro with alacritty ---
+  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty-micro/name"
+    value: "'Alacritty Micro'"
+  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty-micro/command"
+    value: "'alacritty -e micro'"
+  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty-micro/binding"
     value: "'<Super>e'"
   # --- Window management ---
   - key: "/org/gnome/desktop/wm/keybindings/close"
