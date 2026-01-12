@@ -7,7 +7,7 @@
     - flatpak
 
 - name: Check if Flathub remote exists
-  command: flatpak remotes --user
+  command: flatpak remotes #--user
   register: flatpak_remotes
   changed_when: false
   tags:
