@@ -1,6 +1,35 @@
 ---
-- name: Initialize chezmoi and get dotfiles from Github
+- name: Get chezmoi source path
   become: false
-  ansible.builtin.shell: chezmoi init --apply https://github.com/{{ github_username }}/dotfiles.git
+  ansible.builtin.command: chezmoi source-path
+  register: chezmoi_path
+  changed_when: false
   tags:
+    - chezmoi
+    - dotfiles
+
+- name: Check if chezmoi is initialized
+  become: false
+  ansible.builtin.stat:
+    path: "{{ chezmoi_path.stdout }}"
+  register: chezmoi_state
+  tags:
+    - chezmoi
+    - dotfiles
+
+- name: Initialize chezmoi
+  become: false
+  ansible.builtin.command:
+    cmd: chezmoi init https://github.com/{{ github_username }}/dotfiles.git
+  when: not chezmoi_state.stat.exists
+  tags:
+    - chezmoi
+    - dotfiles
+
+- name: Update dotfiles
+  become: false
+  ansible.builtin.command:
+    cmd: chezmoi update
+  tags:
+    - chezmoi
     - dotfiles
