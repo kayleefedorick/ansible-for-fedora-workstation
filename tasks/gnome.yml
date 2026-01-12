@@ -40,11 +40,20 @@
     - desktop
     - gnome
 
+- name: Get enabled GNOME extensions
+  become: false
+  ansible.builtin.shell: gnome-extensions list --enabled
+  register: enabled_extensions
+  changed_when: false
+  tags:
+    - desktop
+    - gnome
+
 - name: Enable GNOME Extensions
   become: false
   ansible.builtin.shell: gnome-extensions-cli enable {{ item }}
   loop: "{{ gnome_extensions }}"
-  ignore_errors: true
+  when: item not in enabled_extensions.stdout
   tags:
     - desktop
     - gnome
