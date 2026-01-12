@@ -3,11 +3,15 @@
   become: false
   set_fact:
     font_dest_dir: "/home/{{ current_user }}/.local/share/fonts"
+  tags:
+    - fonts
 
 - name: Ensure unzip is installed
   dnf:
     name: unzip
     state: present
+  tags:
+    - fonts
 
 - name: Create temporary font download directory
   become: false
@@ -15,6 +19,8 @@
     path: "{{ font_temp_dir }}"
     state: directory
     mode: '0755'
+  tags:
+    - fonts
 
 - name: Download font zip
   get_url:
@@ -22,6 +28,8 @@
     dest: "{{ font_temp_dir }}/{{ item | basename }}"
     mode: '0644'
   loop: "{{ font_urls }}"
+  tags:
+    - fonts
 
 - name: Create temporary font extraction directory
   file:
@@ -29,6 +37,8 @@
     state: directory
     mode: '0755'
   loop: "{{ font_urls }}"
+  tags:
+    - fonts
 
 - name: Check extraction directory contents
   find:
@@ -40,6 +50,8 @@
   register: extract_dir_contents
   ignore_errors: true
   failed_when: false
+  tags:
+    - fonts
 
 - name: Extract font zip to temporary folder
   unarchive:
@@ -50,6 +62,8 @@
   loop_control:
     index_var: font_index
   when: extract_dir_contents.results[font_index].matched | default(0) == 0
+  tags:
+    - fonts
 
 - name: Find extracted fonts
   find:
@@ -57,6 +71,8 @@
     patterns: "*.otf"
     recurse: yes
   register: otf_fonts
+  tags:
+    - fonts
 
 - name: Find installed fonts
   find:
@@ -64,16 +80,22 @@
     patterns: "*.otf"
     recurse: yes
   register: installed_fonts
+  tags:
+    - fonts
 
 - name: Clear list of fonts to copy
   set_fact:
     fonts_to_copy: []
-    
+  tags:
+    - fonts
+
 - name: Determine which fonts are missing
   set_fact:
     fonts_to_copy: "{{ fonts_to_copy + [item.path] }}"
   loop: "{{ otf_fonts.files }}"
   when: item.path | basename not in (installed_fonts.files | map(attribute='path') | map('basename') | list)
+  tags:
+    - fonts
 
 - name: Copy missing fonts to user font directory
   copy:
@@ -83,14 +105,20 @@
     group: "{{ current_user }}"
     mode: '0644'
   loop: "{{ fonts_to_copy }}"
+  tags:
+    - fonts
 
 - name: Update font cache
   become: false
   ansible.builtin.command: fc-cache -fv
   when: fonts_to_copy | length > 0
+  tags:
+    - fonts
 
 - name: Clean up temporary font directory
   file:
     path: "{{ font_temp_dir }}"
     state: absent
   when: cleanup_fonts | default(false)
+  tags:
+    - fonts
