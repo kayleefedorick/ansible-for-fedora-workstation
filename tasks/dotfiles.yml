@@ -26,10 +26,32 @@
     - chezmoi
     - dotfiles
 
+- name: Fetch latest dotfile repo changes
+  become: false
+  ansible.builtin.command: git fetch
+  args:
+    chdir: "{{ chezmoi_path.stdout }}"
+  register: git_fetch
+  changed_when: false
+  tags:
+    - chezmoi
+    - dotfiles
+
+- name: Check if local dotfiles are behind
+  become: false
+  ansible.builtin.command: git rev-list HEAD..origin/main --count
+  args:
+    chdir: "{{ chezmoi_path.stdout }}"
+  register: git_behind
+  changed_when: false
+  tags:
+    - chezmoi
+    - dotfiles
+
 - name: Update dotfiles
   become: false
-  ansible.builtin.command:
-    cmd: chezmoi update
+  ansible.builtin.command: chezmoi update
+  when: git_behind.stdout | int > 0
   tags:
     - chezmoi
     - dotfiles
