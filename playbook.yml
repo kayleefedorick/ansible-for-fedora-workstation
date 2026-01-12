@@ -19,8 +19,8 @@
     - import_tasks: tasks/packages.yml
     - import_tasks: tasks/rpmfusion.yml
     - import_tasks: tasks/flatpak.yml
+    - import_tasks: tasks/cargo.yml
     - import_tasks: tasks/security.yml
     - import_tasks: tasks/gnome.yml
-    - import_tasks: tasks/eza.yml
     - import_tasks: tasks/dotfiles.yml
     - import_tasks: tasks/zsh.yml

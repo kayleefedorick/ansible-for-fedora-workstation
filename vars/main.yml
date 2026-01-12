@@ -60,6 +60,9 @@ flatpak_packages:
   - org.gimp.GIMP
   - org.videolan.VLC
 
+cargo_packages:
+  - eza
+
 gnome_extensions:
   - user-theme@gnome-shell-extensions.gcampax.github.com
   - clipboard-indicator@tudmotu.com
