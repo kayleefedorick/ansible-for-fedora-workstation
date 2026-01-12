@@ -1,0 +1,8 @@
+---
+- name: Install eza
+  become: false
+  ansible.builtin.shell: cargo install eza
+  args:
+    creates: "{{ ansible_env.HOME }}/.cargo/bin/eza"
+  tags:
+    - eza
