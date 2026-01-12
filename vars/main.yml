@@ -4,6 +4,10 @@ username: "{{ ansible_user_id }}"
 # for dotfiles
 github_username: "kayleefedorick"
 
+# shells
+user_shell: "zsh"
+root_shell: "bash"
+
 system_packages:
   - "@virtualization"
   - ansible
