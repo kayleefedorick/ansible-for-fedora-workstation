@@ -1,6 +1,9 @@
 ---
 username: "{{ ansible_user_id }}"
 
+# for dotfiles
+github_username: "kayleefedorick"
+
 system_packages:
   - "@virtualization"
   - ansible

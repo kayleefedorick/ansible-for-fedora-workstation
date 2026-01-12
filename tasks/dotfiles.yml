@@ -1,39 +1,6 @@
 ---
-#
-# - name: Source Rust environment
-#   shell: source /home/{{ username }}/.cargo/env
-#   changed_when: false
-#   tags:
-#     - dotfiles
-
-# - name: Install Dotter
-#   become_user: "{{ ansible_user_id }}"
-#   shell: cargo install dotter
-#   tags:
-#     - dotfiles
-
-# - name: Create dotfiles directory for user
-#   file:
-#     path: "/home/{{ username }}/.dotfiles"
-#     state: directory
-#     owner: "{{ username }}"
-#     group: "{{ username }}"
-#   tags:
-#     - dotfiles
-
-# - name: Clone dotfiles repository
-#   git:
-#     repo: https://codeberg.org/artnay/dotfiles.git
-#     dest: "/home/{{ username }}/.dotfiles"
-#     force: yes
-#   become_user: "{{ username }}"
-#   tags:
-#     - dotfiles
-
-# - name: Deploy dotfiles with Dotter
-#   command: dotter deploy
-#   args:
-#     chdir: "/home/{{ username }}/.dotfiles"
-#   become_user: "{{ username }}"
-#   tags:
-#     - dotfiles
+- name: Initialize chezmoi and get dotfiles from Github
+  become: false
+  ansible.builtin.shell: chezmoi init --apply https://github.com/{{ github_username }}/dotfiles.git
+  tags:
+    - dotfiles
