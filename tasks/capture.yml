@@ -1,0 +1,7 @@
+---
+- name: Capture the current user
+  become: false
+  set_fact:
+    current_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+  tags:
+    - capture

@@ -1,0 +1,96 @@
+---
+- name: Capture user font directory
+  become: false
+  set_fact:
+    font_dest_dir: "/home/{{ current_user }}/.local/share/fonts"
+
+- name: Ensure unzip is installed
+  dnf:
+    name: unzip
+    state: present
+
+- name: Create temporary font download directory
+  become: false
+  file:
+    path: "{{ font_temp_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Download font zip
+  get_url:
+    url: "{{ item }}"
+    dest: "{{ font_temp_dir }}/{{ item | basename }}"
+    mode: '0644'
+  loop: "{{ font_urls }}"
+
+- name: Create temporary font extraction directory
+  file:
+    path: "{{ font_temp_dir }}/{{ item | basename | regex_replace('.zip$', '') }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ font_urls }}"
+
+- name: Check extraction directory contents
+  find:
+    paths: "{{ font_temp_dir }}/{{ item | basename | regex_replace('.zip$', '') }}"
+    recurse: no
+  loop: "{{ font_urls }}"
+  loop_control:
+    index_var: font_index
+  register: extract_dir_contents
+  ignore_errors: true
+  failed_when: false
+
+- name: Extract font zip to temporary folder
+  unarchive:
+    src: "{{ font_temp_dir }}/{{ item | basename }}"
+    dest: "{{ font_temp_dir }}/{{ item | basename | regex_replace('.zip$', '') }}"
+    remote_src: yes
+  loop: "{{ font_urls }}"
+  loop_control:
+    index_var: font_index
+  when: extract_dir_contents.results[font_index].matched | default(0) == 0
+
+- name: Find extracted fonts
+  find:
+    paths: "{{ font_temp_dir }}"
+    patterns: "*.otf"
+    recurse: yes
+  register: otf_fonts
+
+- name: Find installed fonts
+  find:
+    paths: "{{ font_dest_dir }}"
+    patterns: "*.otf"
+    recurse: yes
+  register: installed_fonts
+
+- name: Clear list of fonts to copy
+  set_fact:
+    fonts_to_copy: []
+    
+- name: Determine which fonts are missing
+  set_fact:
+    fonts_to_copy: "{{ fonts_to_copy + [item.path] }}"
+  loop: "{{ otf_fonts.files }}"
+  when: item.path | basename not in (installed_fonts.files | map(attribute='path') | map('basename') | list)
+
+- name: Copy missing fonts to user font directory
+  copy:
+    src: "{{ item }}"
+    dest: "{{ font_dest_dir }}/"
+    owner: "{{ current_user }}"
+    group: "{{ current_user }}"
+    mode: '0644'
+  loop: "{{ fonts_to_copy }}"
+
+- name: Update font cache
+  become: false
+  ansible.builtin.command: fc-cache -fv
+  when: fonts_to_copy | length > 0
+
+- name: Clean up temporary font directory
+  file:
+    path: "{{ font_temp_dir }}"
+    state: absent
+  when: cleanup_fonts | default(false)
