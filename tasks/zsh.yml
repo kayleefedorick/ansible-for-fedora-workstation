@@ -3,15 +3,24 @@
   become: false
   set_fact:
     current_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+  tags:
+    - terminal
+    - zsh
 
 - name: Set root shell to bash
   become: true
   ansible.builtin.user:
     name: "{{ username }}"
     shell: '/bin/bash'
+  tags:
+    - terminal
+    - zsh
 
 - name: Set user's shell to zsh ({{ current_user }})
   become: true
   ansible.builtin.user:
     name: "{{ current_user }}"
     shell: '/usr/bin/zsh'
+  tags:
+    - terminal
+    - zsh

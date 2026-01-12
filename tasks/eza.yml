@@ -5,4 +5,5 @@
   args:
     creates: "{{ ansible_env.HOME }}/.cargo/bin/eza"
   tags:
+    - terminal
     - eza
