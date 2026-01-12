@@ -6,6 +6,7 @@ system_packages:
   - ansible
   - alacritty
   - bat
+  - chezmoi
   - dconf-editor
   - dnf-utils
   - duf
