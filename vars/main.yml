@@ -104,8 +104,7 @@ gnome_settings:
       'org.gnome.Calculator.desktop',
       'Alacritty.desktop',
       'org.gnome.Nautilus.desktop',
-      'org.gnome.Settings.desktop'
-    ]"
+      'org.gnome.Settings.desktop']"
 # Key Bindings
   # --- Launchers ---
   - key: "/org/gnome/settings-daemon/plugins/media-keys/home"
@@ -116,8 +115,7 @@ gnome_settings:
   - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
     value: "[
       '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty/',
-      '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty-micro/'
-    ]"
+      '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty-micro/']"
   # --- Custom: Launch alacritty ---
   - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty/name"
     value: "'Alacritty'"
