@@ -41,6 +41,7 @@ development_packages:
   - cmake
 
 desktop_packages:
+  - gnome-tweaks
   - fastfetch
   - hyfetch
 
