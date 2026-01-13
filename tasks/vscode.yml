@@ -1,0 +1,67 @@
+---
+- name: Ensure VSIX directory exists
+  ansible.builtin.file:
+    path: "{{ vscode_vsix_dir }}"
+    state: directory
+    mode: '0755'
+  tags:
+    - vscode
+
+- name: Check for existing VSIX files
+  ansible.builtin.stat:
+    path: "{{ vscode_vsix_dir }}/{{ item }}.vsix"
+  loop: "{{ vscode_extensions + vscode_themes }}"
+  loop_control:
+    label: "{{ item }}"
+  register: vscode_vsix_stat
+  tags:
+    - vscode
+
+- name: Download missing VS Code extension VSIX files
+  ansible.builtin.get_url:
+    url: "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/{{ item.item.split('.')[0] }}/vsextensions/{{ item.item.split('.')[1] }}/latest/vspackage"
+    dest: "{{ vscode_vsix_dir }}/{{ item.item }}.vsix"
+    mode: '0644'
+    force: yes
+  loop: "{{ vscode_vsix_stat.results }}"
+  when: not item.stat.exists
+  loop_control:
+    label: "{{ item.item }}"
+  tags:
+    - vscode
+
+- name: Get list of installed VS Code extensions
+  become: false
+  ansible.builtin.command:
+    cmd: "flatpak run {{ vscode_flatpak_cmd }} --list-extensions"
+  register: installed_extensions
+  changed_when: false
+  failed_when: false
+  tags:
+    - vscode
+
+- name: Install missing VS Code extensions from VSIX
+  become: false
+  ansible.builtin.command:
+    cmd: >
+      flatpak run {{ vscode_flatpak_cmd }}
+      --install-extension {{ vscode_vsix_dir }}/{{ item }}.vsix
+  loop: "{{ vscode_extensions | difference(installed_extensions.stdout_lines) }}"
+  register: vscode_extension_install
+  changed_when: "'Installing' in vscode_extension_install.stdout"
+  failed_when: "'Error' in vscode_extension_install.stdout or 'Error' in vscode_extension_install.stderr"
+  tags:
+    - vscode
+
+- name: Install missing VS Code themes from VSIX
+  become: false
+  ansible.builtin.command:
+    cmd: >
+      flatpak run {{ vscode_flatpak_cmd }}
+      --install-extension {{ vscode_vsix_dir }}/{{ item }}.vsix
+  loop: "{{ vscode_themes | difference(installed_extensions.stdout_lines) }}"
+  register: vscode_theme_install
+  changed_when: "'Installing' in vscode_theme_install.stdout"
+  failed_when: "'Error' in vscode_theme_install.stdout or 'Error' in vscode_theme_install.stderr"
+  tags:
+    - vscode

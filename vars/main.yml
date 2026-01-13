@@ -23,6 +23,24 @@ firefox_extensions:
     install_url: https://addons.mozilla.org/firefox/downloads/latest/bitwarden-password-manager/latest.xpi
 firefox_kill_running: true
 
+# VS Code settings and extensions
+vscode_flatpak_id: com.visualstudio.code
+vscode_flatpak_cmd: "{{ vscode_flatpak_id }}"
+vscode_vsix_dir: "/home/{{ current_user }}/vscode-extensions"
+vscode_extensions:
+  # Python & DevOps
+  - ms-python.python
+  - ms-azuretools.vscode-docker
+  - redhat.ansible
+  - eamodio.gitlens
+  # C / C++ development
+  - ms-vscode.cpptools
+  - ms-vscode.cmake-tools
+  # Vi editing
+  - vscodevim.vim
+vscode_themes:
+  - dracula-theme.theme-dracula
+
 system_packages:
   - "@virtualization"
   - ansible
@@ -71,10 +89,10 @@ rpmfusion_packages:
 
 flatpak_packages:
   - "{{ firefox_flatpak_id }}"
+  - "{{ vscode_flatpak_id }}"
   - org.mozilla.Thunderbird
   - com.bitwarden.desktop
   - com.spotify.Client
-  - com.visualstudio.code
   - org.gnome.Extensions
   - org.freecad.FreeCAD
   - org.gimp.GIMP

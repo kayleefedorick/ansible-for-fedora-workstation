@@ -28,6 +28,7 @@ This repository contains IaC that automates the post-installation tasks for Inte
     + [`tasks/dotfiles.yml` - Dotfile Management (chezmoi)](#tasksdotfilesyml---dotfile-management-chezmoi)
     + [`tasks/shell.yml` - Shell Configuration](#tasksshellyml---shell-configuration)
     + [`tasks/firefox.yml` - Firefox Policy Management](#tasksfirefoxyml---firefox-policy-management)
+    * [`tasks/vscode.yml` - VS Code Extensions & Themes](#tasksvscodeyml---vs-code-extensions--themes)
   * [Configuration Variables](#configuration-variables)
   * [Additional Resources](#additional-resources)
   * [License](#license)
@@ -123,7 +124,7 @@ ansible-playbook playbook.yml --ask-become-pass
 
 **Check Fedora Version**
 
-* Ensures the playbook is running on **Fedora Workstation 43**
+* Ensures the playbook is running on Fedora Workstation 43
 * Fails fast if the distribution or version does not match
 * Prevents accidental execution on unsupported systems
 
@@ -139,7 +140,7 @@ ansible-playbook playbook.yml --ask-become-pass
 
 ### `tasks/update.yml` - System Update
 
-* Updates **all installed RPM packages** to their latest versions
+* Updates all installed RPM packages to their latest versions
 * Ensures the system is fully up to date before additional software is installed
 
 ### `tasks/packages.yml` - Core RPM Packages
@@ -161,7 +162,7 @@ All package lists are configurable via `vars/main.yml`.
 
 ### `tasks/rpmfusion.yml` - RPM Fusion Repositories
 
-* Imports **RPM Fusion Free and Nonfree GPG keys**
+* Imports RPM Fusion Free and Nonfree GPG keys
 * Enables RPM Fusion repositories matching the Fedora version
 * Installs multimedia and hardware-accelerated packages not available in Fedora proper
 
@@ -170,7 +171,7 @@ This enables full codec support and enhanced graphics drivers.
 ### `tasks/flatpak.yml` - Flatpak & Flathub Applications
 
 * Ensures Flatpak is installed
-* Adds the **Flathub** remote if missing
+* Adds the Flathub remote if missing
 * Installs desktop applications such as:
 
   * Bitwarden
@@ -189,7 +190,7 @@ Flatpak applications are installed system-wide from Flathub.
 ### `tasks/security.yml` - SELinux Configuration
 
 * Ensures SELinux-related packages are installed
-* Forces **SELinux enforcing mode** in `/etc/selinux/config`
+* Forces SELinux enforcing mode in `/etc/selinux/config`
 * Enables enforcing mode at runtime if not already active
 
 This provides baseline system security hardening.
@@ -249,6 +250,14 @@ Manages Firefox flatpak policies using Mozilla’s `policies.json` mechanism:
   * Default allowance for other extensions unless explicitly overridden
 * Terminates running Firefox instances to immediately apply changes if policies have changed
 
+### `tasks/vscode.yml` - VS Code Extensions & Themes
+
+* Ensures a VSIX directory exists for downloading extensions and themes
+* Checks for existing VSIX files and only downloads missing ones
+* Retrieves the list of installed VS Code extensions from the Flatpak instance
+* Installs only missing extensions and themes from VSIX files
+* Compatible with Flatpak-installed VS Code
+
 ## Configuration Variables
 
 All user-configurable values live in:
@@ -269,9 +278,14 @@ Key variable groups, types, and descriptions:
 | `firefox_flatpak_base_path`  | `string`          | Base filesystem path of the Firefox Flatpak installation.                                                       |
 | `firefox_policies_dir`       | `string`          | Directory where Firefox `policies.json` is stored.                                                              |
 | `firefox_policies_file`      | `string`          | Full path to the generated Firefox `policies.json` file.                                                        |
-| `firefox_preferences`        | `dict`            | Map of Firefox preference keys to values. Each preference is written as locked via policies.                |
+| `firefox_preferences`        | `dict`            | Map of Firefox preference keys to values. Each preference is written as locked via policies.                    |
 | `firefox_extensions`         | `dict`            | Map of Firefox extension IDs to extension metadata (e.g., `install_url`) for force installation.                |
 | `firefox_kill_running`       | `boolean`         | Whether to terminate running Firefox instances to immediately apply updated policies (`true` / `false`).        |
+| `vscode_flatpak_id`          | `string`          | Flatpak application ID for Visual Studio Code (e.g., `"com.visualstudio.code"`).                                |
+| `vscode_flatpak_cmd`         | `string`          | Flatpak run command for VS Code (usually the same as `vscode_flatpak_id`).                                      |
+| `vscode_vsix_dir`            | `string`          | Directory to store downloaded VSIX files for extensions and themes.                                             |
+| `vscode_extensions`          | `list of strings` | List of VS Code extensions to install via VSIX.                                                                 |
+| `vscode_themes`              | `list of strings` | List of VS Code themes to install via VSIX.                                                                     |
 | `system_packages`            | `list of strings` | List of RPM packages/groups for general system administration.                                                  |
 | `development_packages`       | `list of strings` | List of development tools, compilers, and programming languages.                                                |
 | `desktop_packages`           | `list of strings` | Desktop utilities and aesthetic tools.                                                                          |
