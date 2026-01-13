@@ -25,6 +25,7 @@
     - import_tasks: tasks/gnome.yml
     - import_tasks: tasks/fonts.yml
     - import_tasks: tasks/dotfiles.yml
+    - import_tasks: tasks/git.yml
     - import_tasks: tasks/shell.yml
     - import_tasks: tasks/firefox.yml
     - import_tasks: tasks/vscode.yml

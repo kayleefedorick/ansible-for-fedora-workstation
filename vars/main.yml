@@ -4,6 +4,20 @@ username: "{{ ansible_user_id }}"
 # for dotfiles
 github_username: "kayleefedorick"
 
+# git config
+git_user_home: "/home/{{ current_user }}"
+# git user info
+git_name: "kayleefedorick"
+git_email: "kaylee.fedorick@gmail.com"
+git_editor: "micro"
+git_default_branch: "main"
+# ssh
+ssh_key_type: "ed25519"
+ssh_key_bits: 4096
+ssh_key_comment: "{{ git_email }}"
+ssh_key_path: "{{ git_user_home }}/.ssh/id_{{ ssh_key_type }}"
+ssh_key_mode: "0600"
+
 # shells
 user_shell: "zsh"
 root_shell: "bash"
@@ -67,6 +81,7 @@ development_packages:
   - "@development-tools"
   - kicad
   - git
+  - openssh
   - pipx
   - python3
   - python3-psutil

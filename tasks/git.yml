@@ -1,0 +1,97 @@
+---
+- name: Ensure git is installed
+  become: true
+  dnf:
+    name:
+      - git
+    state: present
+  tags:
+    - git
+
+- name: Ensure openssh is installed
+  become: true
+  dnf:
+    name:
+      - openssh
+    state: present
+  tags:
+    - ssh
+
+- name: Ensure .ssh directory exists
+  file:
+    path: "{{ git_user_home }}/.ssh"
+    state: directory
+    owner: "{{ current_user }}"
+    group: "{{ current_user }}"
+    mode: "0700"
+  tags:
+    - ssh
+
+- name: Check if SSH private key exists
+  stat:
+    path: "{{ ssh_key_path }}"
+  register: ssh_key_stat
+  tags:
+    - ssh
+
+- name: Generate SSH key if it does not exist
+  community.crypto.openssh_keypair:
+    path: "{{ ssh_key_path }}"
+    type: "{{ ssh_key_type }}"
+    size: "{{ ssh_key_bits }}"
+    comment: "{{ ssh_key_comment }}"
+    owner: "{{ current_user }}"
+    group: "{{ current_user }}"
+    mode: "{{ ssh_key_mode }}"
+  when: not ssh_key_stat.stat.exists
+  become: true
+  become_user: "{{ current_user }}"
+  tags:
+    - ssh
+
+- name: Ensure SSH public key permissions
+  file:
+    path: "{{ ssh_key_path }}.pub"
+    owner: "{{ current_user }}"
+    group: "{{ current_user }}"
+    mode: "0644"
+
+- name: Configure git user.name
+  git_config:
+    name: user.name
+    scope: global
+    value: "{{ git_name }}"
+  become: true
+  become_user: "{{ current_user }}"
+  tags:
+    - git
+
+- name: Configure git user.email
+  git_config:
+    name: user.email
+    scope: global
+    value: "{{ git_email }}"
+  become: true
+  become_user: "{{ current_user }}"
+  tags:
+    - git
+
+- name: Configure git core.editor
+  git_config:
+    name: core.editor
+    scope: global
+    value: "{{ git_editor }}"
+  become: true
+  become_user: "{{ current_user }}"
+  tags:
+    - git
+
+- name: Configure git default branch name
+  git_config:
+    name: init.defaultBranch
+    scope: global
+    value: "{{ git_default_branch }}"
+  become: true
+  become_user: "{{ current_user }}"
+  tags:
+    - git

@@ -26,6 +26,7 @@ This repository contains IaC that automates the post-installation tasks for Inte
     + [`tasks/gnome.yml` - GNOME Desktop Customization](#tasksgnomeyml---gnome-desktop-customization)
     + [`tasks/fonts.yml` - User Font Installation](#tasksfontsyml---user-font-installation)
     + [`tasks/dotfiles.yml` - Dotfile Management (chezmoi)](#tasksdotfilesyml---dotfile-management-chezmoi)
+    + [`tasks/git.yml` - Git & SSH Configuration](#tasksgityml---git-and-ssh-configuration)
     + [`tasks/shell.yml` - Shell Configuration](#tasksshellyml---shell-configuration)
     + [`tasks/firefox.yml` - Firefox Policy Management](#tasksfirefoxyml---firefox-policy-management)
     * [`tasks/vscode.yml` - VS Code Extensions & Themes](#tasksvscodeyml---vs-code-extensions--themes)
@@ -231,6 +232,24 @@ Fonts are installed **per-user**, not system-wide.
 
 This ensures dotfiles stay in sync without unnecessary changes.
 
+### `tasks/git.yml` - Git and SSH Configuration
+
+Configures Git and SSH for the invoking user:
+
+* Ensures required packages are installed:
+  * `git`
+  * `openssh`
+* Creates the user’s `~/.ssh` directory with secure permissions
+* Generates an SSH key pair only if one does not already exist
+  * Uses `ed25519` by default
+  * Avoids overwriting or reading existing (possibly passphrase-protected) keys
+* Ensures correct permissions on the public key
+* Configures global Git settings for the user:
+  * `user.name`
+  * `user.email`
+  * `core.editor`
+  * `init.defaultBranch`
+
 ### `tasks/shell.yml` - Shell Configuration
 
 * Sets the **root shell** (default: `bash`)
@@ -272,6 +291,16 @@ Key variable groups, types, and descriptions:
 | ---------------------------- | ----------------- | --------------------------------------------------------------------------------------------------------------- |
 | `username`                   | `string`          | The main system username (usually the invoking user).                                                           |
 | `github_username`            | `string`          | GitHub username for fetching dotfiles via chezmoi.                                                              |
+| `git_user_home`              | `string`          | Home directory of the user (used for Git config and SSH keys).                                                  |
+| `git_name`                   | `string`          | Git `user.name` value written to the global Git config.                                                         |
+| `git_email`                  | `string`          | Git `user.email` value and default SSH key comment.                                                             |
+| `git_editor`                 | `string`          | Default Git editor (`core.editor`).                                                                             |
+| `git_default_branch`         | `string`          | Default branch name for new repositories (`init.defaultBranch`).                                                |
+| `ssh_key_type`               | `string`          | SSH key type to generate (default: `ed25519`).                                                                  |
+| `ssh_key_bits`               | `integer`         | Key size (used for RSA; ignored for `ed25519`, kept for compatibility).                                         |
+| `ssh_key_comment`            | `string`          | Comment added to the SSH public key (defaults to `git_email`).                                                  |
+| `ssh_key_path`               | `string`          | Full path to the SSH private key.                                                                               |
+| `ssh_key_mode`               | `string`          | File mode applied to the SSH private key (default: `0600`).                                                     |
 | `user_shell`                 | `string`          | Shell to set for the regular user (e.g., `"zsh"`).                                                              |
 | `root_shell`                 | `string`          | Shell to set for root (e.g., `"bash"`).                                                                         |
 | `firefox_flatpak_id`         | `string`          | Flatpak application ID for Firefox (used to detect and terminate running instances).                            |
