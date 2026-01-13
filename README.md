@@ -7,6 +7,12 @@ This repository contains IaC that automates the post-installation tasks for Inte
 - [Ansible for Fedora Workstation](#ansible-for-fedora-workstation)
   * [One-Liner Install (Recommended)](#one-liner-install-recommended)
     + [Quick Start](#quick-start)
+  * [Using This Repo](#using-this-repo)
+  * [Keyboard Shortcuts](#keyboard-shortcuts)
+    + [Modifier Keys](#modifier-keys)
+    + [Workspace Management](#workspace-management)
+    + [Application Launchers](#application-launchers)
+    + [Favorites Bar (Dock)](#favorites-bar-dock)
   * [Prerequisites](#prerequisites)
   * [Preparations](#preparations)
     + [Download ISO image directly (optional)](#download-iso-image-directly-optional)
@@ -45,6 +51,61 @@ Run this command on a **fresh Fedora Workstation 43 install**:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/kayleefedorick/ansible-for-fedora-workstation/main/install.sh | bash
 ```
+
+## Using This Repo
+
+This repository is intentionally opinionated. It reflects how I want a Fedora Workstation system to behave out of the box. It provides a reproducible baseline that I can apply to a fresh system and immediately be productive.
+
+Some of the behavior pre-configured here relies on my dotfiles repository:
+
+**[https://github.com/kayleefedorick/dotfiles](https://github.com/kayleefedorick/dotfiles)**
+
+You have three paths:
+
+1. **Use it as-is**: 
+   Clone the repo, apply the playbooks, and also use my dotfiles for the intended experience.
+
+2. **Use it as a base**: 
+   Fork it, remove or replace opinionated pieces, and layer in your own dotfiles and workflows.
+
+3. **Start from scratch**: 
+   Treat this repo as a reference for structured workstation provisioning with Ansible.
+
+## Keyboard Shortcuts
+
+### Modifier Keys
+
+* **Super** = ⊞ Command / Windows Key
+
+### Workspace Management
+
+| Shortcut               | Action                                     |
+| ---------------------- | ------------------------------------------ |
+| `Super + 1..4`         | Switch to workspace 1–4                    |
+| `Shift + Super + 1..4` | Move active window to workspace 1–4        |
+| `Super + ← ↑ → ↓`      | Move active window to a tile               |
+| `Super + Q`            | Close active window                        |
+
+### Application Launchers
+
+| Shortcut         | Action                                           |
+| ---------------- | ------------------------------------------------ |
+| `Super + Return` | Launch **Alacritty** (Terminal)                  |
+| `Super + E`      | Launch **Alacritty** running **micro** (Editor)  |
+| `Super + B`      | Launch **Firefox** (Browser)                     |
+| `Super + F`      | Open **Files**                                   |
+| `Super + /`      | Launch **Bitwarden** (Password manager)          |
+| `Super + .`      | Launch **Qalculate** (Advanced calculator)       |
+
+### Favorites Bar (Dock)
+
+| Shortcut    | Application        |
+| ----------- | ------------------ |
+| `Super + 5` | Thunderbird        |
+| `Super + 6` | Spotify            |
+| `Super + 7` | Visual Studio Code |
+| `Super + 8` | FreeCAD            |
+| `Super + 9` | KiCad              |
 
 ## Prerequisites
 
