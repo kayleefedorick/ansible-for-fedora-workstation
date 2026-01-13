@@ -5,15 +5,44 @@ Configure and manage [Fedora](https://fedoraproject.org/) Workstation 43 using [
 This repository contains IaC that automates the post-installation tasks for Intel/AMD x86-64 desktop and laptop computers using Fedora Workstation 43. Tasks include the installation of RPM and Flatpak packages needed for system administration, development, and engineering.
 
 - [Ansible for Fedora Workstation](#ansible-for-fedora-workstation)
-   * [Prerequisites](#prerequisites)
-   * [Preparations](#preparations)
-      + [Download ISO image directly (optional)](#download-iso-image-directly-optional)
-      + [OS and Ansible Installation](#os-and-ansible-installation)
-   * [Usage](#usage)
-      + [Basic Commands](#basic-commands)
-      + [Running Playbook](#running-playbook)
-   * [Additional Resources](#additional-resources)
-   * [License](#license)
+  * [One-Liner Install (Recommended)](#one-liner-install-recommended)
+    + [Quick Start](#quick-start)
+  * [Prerequisites](#prerequisites)
+  * [Preparations](#preparations)
+    + [Download ISO image directly (optional)](#download-iso-image-directly-optional)
+    + [OS and Ansible Installation](#os-and-ansible-installation)
+  * [Usage](#usage)
+    + [Basic Commands](#basic-commands)
+    + [Running Playbook](#running-playbook)
+  * [Playbook Execution Flow](#playbook-execution-flow)
+  * [Task Breakdown](#task-breakdown)
+    + [Pre-tasks: Environment Validation](#pre-tasks-environment-validation)
+    + [`tasks/capture.yml` - User Context Detection](#taskscaptureyml---user-context-detection)
+    + [`tasks/update.yml` - System Update](#tasksupdateyml---system-update)
+    + [`tasks/packages.yml` - Core RPM Packages](#taskspackagesyml---core-rpm-packages)
+    + [`tasks/rpmfusion.yml` - RPM Fusion Repositories](#tasksrpmfusionyml---rpm-fusion-repositories)
+    + [`tasks/flatpak.yml` - Flatpak & Flathub Applications](#tasksflatpakyml---flatpak--flathub-applications)
+    + [`tasks/cargo.yml` - Rust (Cargo) Packages](#taskscargoyml---rust-cargo-packages)
+    + [`tasks/security.yml` - SELinux Configuration](#taskssecurityyml---selinux-configuration)
+    + [`tasks/gnome.yml` - GNOME Desktop Customization](#tasksgnomeyml---gnome-desktop-customization)
+    + [`tasks/fonts.yml` - User Font Installation](#tasksfontsyml---user-font-installation)
+    + [`tasks/dotfiles.yml` - Dotfile Management (chezmoi)](#tasksdotfilesyml---dotfile-management-chezmoi)
+    + [`tasks/shell.yml` - Shell Configuration](#tasksshellyml---shell-configuration)
+  * [Configuration Variables](#configuration-variables)
+  * [Additional Resources](#additional-resources)
+  * [License](#license)
+
+## One-Liner Install (Recommended)
+
+This repository supports a **single-command bootstrap** that installs Ansible (if missing), clones the repository, and runs the playbook on your local Fedora Workstation.
+
+### Quick Start
+
+Run this command on a **fresh Fedora Workstation 43 install**:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/kayleefedorick/ansible-for-fedora-workstation/main/install.sh | bash
+```
 
 ## Prerequisites
 
@@ -89,8 +118,6 @@ Run the playbook on localhost:
 ansible-playbook playbook.yml --ask-become-pass
 ```
 
----
-
 ## Playbook Execution Flow
 
 The playbook executes tasks **sequentially** in the order they are imported in `playbook.yml`.
@@ -106,8 +133,6 @@ High-level flow:
 6. Desktop (GNOME) customization
 7. User environment configuration (fonts, dotfiles, shells)
 
----
-
 ## Task Breakdown
 
 ### Pre-tasks: Environment Validation
@@ -117,8 +142,6 @@ High-level flow:
 * Ensures the playbook is running on **Fedora Workstation 43**
 * Fails fast if the distribution or version does not match
 * Prevents accidental execution on unsupported systems
-
----
 
 ### `tasks/capture.yml` - User Context Detection
 
@@ -130,14 +153,10 @@ High-level flow:
   * Dotfiles
   * User shell configuration
 
----
-
 ### `tasks/update.yml` - System Update
 
 * Updates **all installed RPM packages** to their latest versions
 * Ensures the system is fully up to date before additional software is installed
-
----
 
 ### `tasks/packages.yml` - Core RPM Packages
 
@@ -156,8 +175,6 @@ Installs RPM packages grouped by purpose:
 
 All package lists are configurable via `vars/main.yml`.
 
----
-
 ### `tasks/rpmfusion.yml` - RPM Fusion Repositories
 
 * Imports **RPM Fusion Free and Nonfree GPG keys**
@@ -165,8 +182,6 @@ All package lists are configurable via `vars/main.yml`.
 * Installs multimedia and hardware-accelerated packages not available in Fedora proper
 
 This enables full codec support and enhanced graphics drivers.
-
----
 
 ### `tasks/flatpak.yml` - Flatpak & Flathub Applications
 
@@ -181,15 +196,11 @@ This enables full codec support and enhanced graphics drivers.
 
 Flatpak applications are installed system-wide from Flathub.
 
----
-
 ### `tasks/cargo.yml` - Rust (Cargo) Packages
 
 * Installs user-level Rust tools via `cargo`
 * Runs without privilege escalation
 * Example tools include modern CLI replacements (e.g. `eza`)
-
----
 
 ### `tasks/security.yml` - SELinux Configuration
 
@@ -198,8 +209,6 @@ Flatpak applications are installed system-wide from Flathub.
 * Enables enforcing mode at runtime if not already active
 
 This provides baseline system security hardening.
-
----
 
 ### `tasks/gnome.yml` - GNOME Desktop Customization
 
@@ -218,8 +227,6 @@ Configures the GNOME desktop environment:
 
 All extensions and settings are defined in `vars/main.yml`.
 
----
-
 ### `tasks/fonts.yml` - User Font Installation
 
 * Downloads Nerd Fonts archives
@@ -230,8 +237,6 @@ All extensions and settings are defined in `vars/main.yml`.
 
 Fonts are installed **per-user**, not system-wide.
 
----
-
 ### `tasks/dotfiles.yml` - Dotfile Management (chezmoi)
 
 * Detects whether `chezmoi` is initialized
@@ -241,8 +246,6 @@ Fonts are installed **per-user**, not system-wide.
 
 This ensures dotfiles stay in sync without unnecessary changes.
 
----
-
 ### `tasks/shell.yml` - Shell Configuration
 
 * Sets the **root shell** (default: `bash`)
@@ -250,8 +253,6 @@ This ensures dotfiles stay in sync without unnecessary changes.
 * Uses captured user context to avoid misconfiguration
 
 Shells are configurable through variables.
-
----
 
 ## Configuration Variables
 
@@ -280,7 +281,6 @@ Key variable groups, types, and descriptions:
 | `font_urls`            | `list of strings` | URLs to font archives to download and install.                                                                |
 | `font_temp_dir`        | `string`          | Temporary directory for font downloads and extraction.                                                        |
 | `cleanup_fonts`        | `boolean`         | Whether to remove the temporary font directory after installation (`true`/`false`).                           |
-
 
 ## Additional Resources
 
