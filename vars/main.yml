@@ -159,7 +159,7 @@ gnome_settings:
       'Alacritty.desktop',
       'org.gnome.Nautilus.desktop',
       'org.mozilla.firefox.desktop',
-      'net.thunderbird.Thunderbird.desktop',
+      'org.mozilla.Thunderbird.desktop',
       'com.spotify.Client.desktop',
       'com.visualstudio.code.desktop',
       'org.freecad.FreeCAD.desktop',
