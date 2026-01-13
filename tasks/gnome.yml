@@ -68,3 +68,40 @@
   tags:
     - desktop
     - gnome
+
+- name: Ensure GTK bookmarks directory exists
+  file:
+    path: "/home/{{ current_user }}/.config/gtk-3.0"
+    state: directory
+    owner: "{{ current_user }}"
+    group: "{{ current_user }}"
+    mode: "0700"
+  tags:
+    - desktop
+    - gnome
+
+- name: Ensure extra sidebar directories exist in home directory
+  file:
+    path: "/home/{{ current_user }}/{{ item }}"
+    state: directory
+    owner: "{{ current_user }}"
+    group: "{{ current_user }}"
+    mode: "0755"
+  loop: "{{ gnome_sidebar_extras }}"
+  tags:
+    - desktop
+    - gnome
+
+- name: Add extra directories to GNOME Files sidebar
+  lineinfile:
+    path: "/home/{{ current_user }}/.config/gtk-3.0/bookmarks"
+    line: "file:///home/{{ current_user }}/{{ item }} {{ item }}"
+    create: true
+    owner: "{{ current_user }}"
+    group: "{{ current_user }}"
+    mode: "0644"
+    state: present
+  loop: "{{ gnome_sidebar_extras }}"
+  tags:
+    - desktop
+    - gnome

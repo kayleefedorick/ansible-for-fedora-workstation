@@ -211,7 +211,16 @@ Configures the GNOME desktop environment:
   * Custom keyboard shortcuts
   * Workspace and window management keybindings
 
-All extensions and settings are defined in `vars/main.yml`.
+#### GNOME Files Sidebar Folders
+
+Manages custom folders in the GNOME Files (Nautilus) sidebar:
+
+* Creates user directories in the home folder based on a configurable list
+* Ensures the GTK bookmarks configuration directory exists
+* Adds each folder to the GNOME Files sidebar using GTK bookmarks
+* Avoids duplicate sidebar entries
+
+This feature uses GNOME’s native GTK bookmark mechanism rather than filesystem symlinks.
 
 ### `tasks/fonts.yml` - User Font Installation
 
@@ -323,6 +332,7 @@ Key variable groups, types, and descriptions:
 | `cargo_packages`             | `list of strings` | Rust tools to install via Cargo.                                                                                |
 | `gnome_extensions`           | `list of strings` | GNOME Shell extension identifiers to install and enable.                                                        |
 | `gnome_settings`             | `list of dicts`   | GNOME settings to apply. Each dict requires:<br>`key: string` – DConf path<br>`value: string` – Setting value   |
+| `gnome_sidebar_extras`       | `list of strings` | List of directory names to create in the user’s home directory and pin to the GNOME Files sidebar.              |
 | `font_urls`                  | `list of strings` | URLs to font archives to download and install.                                                                  |
 | `font_temp_dir`              | `string`          | Temporary directory for font downloads and extraction.                                                          |
 | `cleanup_fonts`              | `boolean`         | Whether to remove the temporary font directory after installation (`true` / `false`).                           |

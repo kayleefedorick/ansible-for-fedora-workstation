@@ -239,6 +239,10 @@ gnome_settings:
   - key: "/org/gnome/shell/keybindings/switch-to-application-4"
     value: "['<Super><Control>4']"
 
+gnome_sidebar_extras:
+  - Developer
+  - Projects
+
 font_urls:
   - "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/DroidSansMono.zip"
 
