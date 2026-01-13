@@ -117,6 +117,8 @@ gnome_settings:
     value: "'prefer-dark'"
   - key: "/org/gnome/desktop/interface/accent-color"
     value: "'purple'"
+  - key: "/org/gnome/desktop/interface/icon-theme"
+    value: "'Adwaita-purple'"
   - key: "/org/gnome/desktop/interface/gtk-theme"
     value: "'Dracula'"
   - key: "/org/gnome/desktop/wm/preferences/theme"
