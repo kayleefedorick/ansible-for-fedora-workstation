@@ -47,3 +47,4 @@ echo "==> Running Ansible playbook"
 ansible-playbook playbook.yml --ask-become-pass
 
 echo "==> Done! System configuration complete."
+echo "You should log out and log in again before using the system."
