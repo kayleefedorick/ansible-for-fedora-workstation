@@ -64,6 +64,7 @@ flatpak_packages:
   - org.mozilla.Thunderbird
   - org.gimp.GIMP
   - org.videolan.VLC
+  - io.github.Qalculate
 
 cargo_packages:
   - eza
@@ -97,15 +98,17 @@ gnome_settings:
   # --- Dock ---
   - key: "/org/gnome/shell/favorite-apps"
     value: "[
+      'Alacritty.desktop',
+      'org.gnome.Nautilus.desktop',
       'org.mozilla.firefox.desktop',
       'net.thunderbird.Thunderbird.desktop',
+      'com.spotify.Client.desktop',
       'com.visualstudio.code.desktop',
       'org.freecad.FreeCAD.desktop',
       'org.kicad.kicad.desktop',
-      'org.gnome.Calculator.desktop',
-      'Alacritty.desktop',
-      'org.gnome.Nautilus.desktop',
-      'org.gnome.Settings.desktop']"
+      'org.kicad.pcbcalculator.desktop',
+      'io.github.Qalculate.desktop',
+      'com.bitwarden.desktop.desktop']"
 # Key Bindings
   # --- Launchers ---
   - key: "/org/gnome/settings-daemon/plugins/media-keys/home"
@@ -116,7 +119,9 @@ gnome_settings:
   - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
     value: "[
       '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty/',
-      '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty-micro/']"
+      '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty-micro/',
+      '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/bitwarden/',
+      '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/qalculate/']"
   # --- Custom: Launch alacritty ---
   - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty/name"
     value: "'Alacritty'"
@@ -131,6 +136,20 @@ gnome_settings:
     value: "'alacritty -e micro'"
   - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/alacritty-micro/binding"
     value: "'<Super>e'"
+  # --- Custom: Launch Bitwarden (Flatpak) ---
+  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/bitwarden/name"
+    value: "'Bitwarden'"
+  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/bitwarden/command"
+    value: "'flatpak run com.bitwarden.desktop'"
+  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/bitwarden/binding"
+    value: "'<Super>slash'"
+  # --- Custom: Launch Qalculate GTK (Flatpak) ---
+  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/qalculate/name"
+    value: "'Qalculate'"
+  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/qalculate/command"
+    value: "'flatpak run io.github.Qalculate'"
+  - key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/qalculate/binding"
+    value: "'<Super>period'"
   # --- Window management ---
   - key: "/org/gnome/desktop/wm/keybindings/close"
     value: "['<Super>q']"
