@@ -8,6 +8,21 @@ github_username: "kayleefedorick"
 user_shell: "zsh"
 root_shell: "bash"
 
+# Firefox policies
+firefox_flatpak_id: org.mozilla.firefox
+firefox_flatpak_base_path: /var/lib/flatpak/app/org.mozilla.firefox/current/active/files/lib/firefox
+firefox_policies_dir: "{{ firefox_flatpak_base_path }}/distribution"
+firefox_policies_file: "{{ firefox_policies_dir }}/policies.json"
+firefox_preferences:
+  sidebar.revamp: true
+  sidebar.verticalTabs: true
+firefox_extensions:
+  uBlock0@raymondhill.net:
+    install_url: https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi
+  "{446900e4-71c2-419f-a6a7-df9c091e268b}":
+    install_url: https://addons.mozilla.org/firefox/downloads/latest/bitwarden-password-manager/latest.xpi
+firefox_kill_running: true
+
 system_packages:
   - "@virtualization"
   - ansible
@@ -55,13 +70,13 @@ rpmfusion_packages:
   - mesa-vulkan-drivers-freeworld
 
 flatpak_packages:
+  - "{{ firefox_flatpak_id }}"
+  - org.mozilla.Thunderbird
   - com.bitwarden.desktop
   - com.spotify.Client
   - com.visualstudio.code
   - org.gnome.Extensions
   - org.freecad.FreeCAD
-  - org.mozilla.firefox
-  - org.mozilla.Thunderbird
   - org.gimp.GIMP
   - org.videolan.VLC
   - io.github.Qalculate

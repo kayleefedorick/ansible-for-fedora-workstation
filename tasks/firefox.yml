@@ -1,0 +1,52 @@
+---
+- name: Ensure Firefox policies directory exists
+  ansible.builtin.file:
+    path: "{{ firefox_policies_dir }}"
+    state: directory
+    mode: '0755'
+  tags:
+    - firefox
+
+- name: Deploy Firefox policies.json
+  ansible.builtin.copy:
+    dest: "{{ firefox_policies_file }}"
+    mode: '0644'
+    content: |
+      {
+        "policies": {
+          "Preferences": {
+          {% for key, value in firefox_preferences.items() %}
+            "{{ key }}": {
+              "Value": {{ value | to_json }},
+              "Status": "locked"
+            }{% if not loop.last %},{% endif %}
+          {% endfor %}
+          },
+
+          "ExtensionSettings": {
+            "*": {
+              "installation_mode": "allowed"
+            }
+          {% for ext_id, ext in firefox_extensions.items() %},
+            "{{ ext_id }}": {
+              "installation_mode": "force_installed",
+              "install_url": "{{ ext.install_url }}"
+            }
+          {% endfor %}
+          }
+        }
+      }
+  register: firefox_policies
+  tags:
+    - firefox
+
+- name: Kill running Firefox instances to apply policies
+  ansible.builtin.command:
+    cmd: pkill -f {{ firefox_flatpak_id }}
+  register: firefox_kill
+  failed_when: firefox_kill.rc not in [0, 1]
+  when:
+    - firefox_kill_running
+    - firefox_policies.changed
+  tags:
+    - firefox

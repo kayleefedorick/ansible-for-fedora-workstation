@@ -14,7 +14,6 @@ This repository contains IaC that automates the post-installation tasks for Inte
   * [Usage](#usage)
     + [Basic Commands](#basic-commands)
     + [Running Playbook](#running-playbook)
-  * [Playbook Execution Flow](#playbook-execution-flow)
   * [Task Breakdown](#task-breakdown)
     + [Pre-tasks: Environment Validation](#pre-tasks-environment-validation)
     + [`tasks/capture.yml` - User Context Detection](#taskscaptureyml---user-context-detection)
@@ -28,6 +27,7 @@ This repository contains IaC that automates the post-installation tasks for Inte
     + [`tasks/fonts.yml` - User Font Installation](#tasksfontsyml---user-font-installation)
     + [`tasks/dotfiles.yml` - Dotfile Management (chezmoi)](#tasksdotfilesyml---dotfile-management-chezmoi)
     + [`tasks/shell.yml` - Shell Configuration](#tasksshellyml---shell-configuration)
+    + [`tasks/firefox.yml` - Firefox Policy Management](#tasksfirefoxyml---firefox-policy-management)
   * [Configuration Variables](#configuration-variables)
   * [Additional Resources](#additional-resources)
   * [License](#license)
@@ -51,7 +51,7 @@ curl -fsSL https://raw.githubusercontent.com/kayleefedorick/ansible-for-fedora-w
 
 ## Preparations
 
-There are alternative ways to obtain Fedora installation media:
+There are multiple ways to obtain Fedora installation media:
 
 - Use Fedora Media Writer, the official, tested and supported way to make bootable media. See [Download options](https://fedoraproject.org/workstation/download)
 - Download the [ISO image using BitTorrent](https://torrent.fedoraproject.org/torrents/Fedora-Workstation-Live-x86_64-43.torrent)
@@ -117,22 +117,6 @@ Run the playbook on localhost:
 ```bash
 ansible-playbook playbook.yml --ask-become-pass
 ```
-
-## Playbook Execution Flow
-
-The playbook executes tasks **sequentially** in the order they are imported in `playbook.yml`.
-This order is intentional: early tasks establish system state and repositories, while later tasks configure user experience and shells.
-
-High-level flow:
-
-1. Environment validation (pre-tasks)
-2. System capture and updates
-3. Package and repository management
-4. Developer tooling and desktop applications
-5. Security hardening
-6. Desktop (GNOME) customization
-7. User environment configuration (fonts, dotfiles, shells)
-
 ## Task Breakdown
 
 ### Pre-tasks: Environment Validation
@@ -192,7 +176,7 @@ This enables full codec support and enhanced graphics drivers.
   * Bitwarden
   * Spotify
   * Visual Studio Code
-  * Firefox, Thunderbird, VLC, GIMP, FreeCAD
+  * Firefox, Thunderbird, VLC, GIMP, FreeCAD, KiCad
 
 Flatpak applications are installed system-wide from Flathub.
 
@@ -254,6 +238,17 @@ This ensures dotfiles stay in sync without unnecessary changes.
 
 Shells are configurable through variables.
 
+### `tasks/firefox.yml` - Firefox Policy Management
+
+Manages Firefox flatpak policies using Mozilla’s `policies.json` mechanism:
+
+* Ensures the Firefox policies directory exists
+* Deploys a generated `policies.json` file with:
+  * Locked Firefox preferences defined in `firefox_preferences`
+  * Forced installation of extensions defined in `firefox_extensions`
+  * Default allowance for other extensions unless explicitly overridden
+* Terminates running Firefox instances to immediately apply changes if policies have changed
+
 ## Configuration Variables
 
 All user-configurable values live in:
@@ -264,23 +259,30 @@ vars/main.yml
 
 Key variable groups, types, and descriptions:
 
-| Variable               | Type              | Description                                                                                                   |
-| ---------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------- |
-| `username`             | `string`          | The main system username (usually the invoking user).                                                         |
-| `github_username`      | `string`          | GitHub username for fetching dotfiles via chezmoi.                                                            |
-| `user_shell`           | `string`          | Shell to set for the regular user (e.g., `"zsh"`).                                                            |
-| `root_shell`           | `string`          | Shell to set for root (e.g., `"bash"`).                                                                       |
-| `system_packages`      | `list of strings` | List of RPM packages/groups for general system administration.                                                |
-| `development_packages` | `list of strings` | List of development tools, compilers, and programming languages.                                              |
-| `desktop_packages`     | `list of strings` | Desktop utilities and aesthetic tools.                                                                        |
-| `rpmfusion_packages`   | `list of strings` | RPM Fusion-specific packages for multimedia and hardware support.                                             |
-| `flatpak_packages`     | `list of strings` | Flatpak applications to install from Flathub.                                                                 |
-| `cargo_packages`       | `list of strings` | Rust tools to install via Cargo.                                                                              |
-| `gnome_extensions`     | `list of strings` | GNOME Shell extension identifiers to install and enable.                                                      |
-| `gnome_settings`       | `list of dicts`   | GNOME settings to apply. Each dict requires:<br>`key: string` - DConf path<br>`value: string` - Setting value |
-| `font_urls`            | `list of strings` | URLs to font archives to download and install.                                                                |
-| `font_temp_dir`        | `string`          | Temporary directory for font downloads and extraction.                                                        |
-| `cleanup_fonts`        | `boolean`         | Whether to remove the temporary font directory after installation (`true`/`false`).                           |
+| Variable                     | Type              | Description                                                                                                     |
+| ---------------------------- | ----------------- | --------------------------------------------------------------------------------------------------------------- |
+| `username`                   | `string`          | The main system username (usually the invoking user).                                                           |
+| `github_username`            | `string`          | GitHub username for fetching dotfiles via chezmoi.                                                              |
+| `user_shell`                 | `string`          | Shell to set for the regular user (e.g., `"zsh"`).                                                              |
+| `root_shell`                 | `string`          | Shell to set for root (e.g., `"bash"`).                                                                         |
+| `firefox_flatpak_id`         | `string`          | Flatpak application ID for Firefox (used to detect and terminate running instances).                            |
+| `firefox_flatpak_base_path`  | `string`          | Base filesystem path of the Firefox Flatpak installation.                                                       |
+| `firefox_policies_dir`       | `string`          | Directory where Firefox `policies.json` is stored.                                                              |
+| `firefox_policies_file`      | `string`          | Full path to the generated Firefox `policies.json` file.                                                        |
+| `firefox_preferences`        | `dict`            | Map of Firefox preference keys to values. Each preference is written as locked via policies.                |
+| `firefox_extensions`         | `dict`            | Map of Firefox extension IDs to extension metadata (e.g., `install_url`) for force installation.                |
+| `firefox_kill_running`       | `boolean`         | Whether to terminate running Firefox instances to immediately apply updated policies (`true` / `false`).        |
+| `system_packages`            | `list of strings` | List of RPM packages/groups for general system administration.                                                  |
+| `development_packages`       | `list of strings` | List of development tools, compilers, and programming languages.                                                |
+| `desktop_packages`           | `list of strings` | Desktop utilities and aesthetic tools.                                                                          |
+| `rpmfusion_packages`         | `list of strings` | RPM Fusion-specific packages for multimedia and hardware support.                                               |
+| `flatpak_packages`           | `list of strings` | Flatpak applications to install from Flathub.                                                                   |
+| `cargo_packages`             | `list of strings` | Rust tools to install via Cargo.                                                                                |
+| `gnome_extensions`           | `list of strings` | GNOME Shell extension identifiers to install and enable.                                                        |
+| `gnome_settings`             | `list of dicts`   | GNOME settings to apply. Each dict requires:<br>`key: string` – DConf path<br>`value: string` – Setting value   |
+| `font_urls`                  | `list of strings` | URLs to font archives to download and install.                                                                  |
+| `font_temp_dir`              | `string`          | Temporary directory for font downloads and extraction.                                                          |
+| `cleanup_fonts`              | `boolean`         | Whether to remove the temporary font directory after installation (`true` / `false`).                           |
 
 ## Additional Resources
 
