@@ -69,11 +69,11 @@ cargo_packages:
   - eza
 
 gnome_extensions:
-  - user-theme@gnome-shell-extensions.gcampax.github.com
   - clipboard-indicator@tudmotu.com
   - tophat@fflewddur.github.io
   - panel-workspace-scroll@polymeilex.github.io
   - tilingshell@ferrarodomenico.com
+  - rounded-window-corners@fxgn
 
 gnome_settings:
   # --- Appearance ---
