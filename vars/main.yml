@@ -158,6 +158,7 @@ gnome_settings:
     value: "[
       'Alacritty.desktop',
       'org.gnome.Nautilus.desktop',
+      'com.bitwarden.desktop.desktop',
       'org.mozilla.firefox.desktop',
       'org.mozilla.Thunderbird.desktop',
       'com.spotify.Client.desktop',
@@ -165,8 +166,7 @@ gnome_settings:
       'org.freecad.FreeCAD.desktop',
       'org.kicad.kicad.desktop',
       'org.kicad.pcbcalculator.desktop',
-      'io.github.Qalculate.desktop',
-      'com.bitwarden.desktop.desktop']"
+      'io.github.Qalculate.desktop']"
 # Key Bindings
   # --- Launchers ---
   - key: "/org/gnome/settings-daemon/plugins/media-keys/home"
