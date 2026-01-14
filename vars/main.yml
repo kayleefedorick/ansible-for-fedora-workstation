@@ -54,6 +54,8 @@ vscode_extensions:
   - ms-vscode.cmake-tools
   # Vi editing
   - vscodevim.vim
+  # Local LLM agent
+  - continue.continue
 vscode_themes:
   - dracula-theme.theme-dracula
 
