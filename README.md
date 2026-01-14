@@ -1,5 +1,7 @@
 # Ansible for Fedora Workstation
 
+<img width="300" alt="Screenshot - Terminal and Browser" src="https://github.com/user-attachments/assets/ee42d653-6ac6-4fda-b66e-fb0bcf81b46b" /> <img width="300" alt="Screenshot - VSCode and FreeCAD" src="https://github.com/user-attachments/assets/a9e04e63-56ac-4d23-8ba9-d1513722058c" /> <img width="300" alt="Screenshot - GNOME Desktop" src="https://github.com/user-attachments/assets/ed8cb75c-bc1a-47bc-9958-740292da1635" />
+
 Configure and manage [Fedora](https://fedoraproject.org/) Workstation 43 using [Ansible](https://github.com/ansible/ansible). Fedora Workstation is a polished, easy to use operating system for laptop and desktop computers, with a complete set of tools for developers and makers of all kinds. Ansible is a suite of software tools that enables infrastructure as code.
 
 This repository contains IaC that automates the post-installation tasks for Intel/AMD x86-64 desktop and laptop computers using Fedora Workstation 43. Tasks include the installation of RPM and Flatpak packages needed for system administration, development, and engineering.
