@@ -1,8 +1,6 @@
-# Ansible for Fedora Workstation
-
-<img width="100%" alt="Screenshot - GNOME Desktop" src="https://github.com/user-attachments/assets/ed8cb75c-bc1a-47bc-9958-740292da1635" />
-
 <img width="50%" alt="Screenshot - Terminal and Browser" src="https://github.com/user-attachments/assets/ee42d653-6ac6-4fda-b66e-fb0bcf81b46b" /><img width="50%" alt="Screenshot - VSCode and FreeCAD" src="https://github.com/user-attachments/assets/a9e04e63-56ac-4d23-8ba9-d1513722058c" />
+
+# Ansible for Fedora Workstation
 
 Configure and manage [Fedora](https://fedoraproject.org/) Workstation 43 using [Ansible](https://github.com/ansible/ansible). Fedora Workstation is a polished, easy to use operating system for laptop and desktop computers, with a complete set of tools for developers and makers of all kinds. Ansible is a suite of software tools that enables infrastructure as code.
 
@@ -74,6 +72,8 @@ You have three paths:
 
 3. **Start from scratch**: 
    Treat this repo as a reference for structured workstation provisioning with Ansible.
+
+<img width="100%" alt="Screenshot - GNOME Desktop" src="https://github.com/user-attachments/assets/ed8cb75c-bc1a-47bc-9958-740292da1635" />
 
 ## Keyboard Shortcuts
 
