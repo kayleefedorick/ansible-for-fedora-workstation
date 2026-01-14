@@ -31,18 +31,23 @@ fi
 
 echo "✔ Fedora $VERSION_ID detected"
 
-# Ensure basic tools
-echo "==> Installing base dependencies"
-sudo dnf install -y git curl ansible
-
 # Decide which repo URL to use
-if [[ -d "$HOME/.ssh" ]] && ls "$HOME/.ssh"/id_{rsa,ed25519,ecdsa} &>/dev/null; then
+SSH_KEY_FOUND=false
+for key in "$HOME/.ssh/id_rsa" "$HOME/.ssh/id_ed25519" "$HOME/.ssh/id_ecdsa"; do
+  [[ -f "$key" ]] && SSH_KEY_FOUND=true && break
+done
+
+if $SSH_KEY_FOUND; then
   echo "✔ SSH key detected, using SSH for GitHub"
   REPO_URL="$REPO_SSH_URL"
 else
   echo "ℹ No SSH key detected, using HTTPS for GitHub"
   REPO_URL="$REPO_HTTPS_URL"
 fi
+
+# Ensure basic tools
+echo "==> Installing base dependencies"
+sudo dnf install -y git curl ansible
 
 # Clone or update repo
 if [[ -d "$REPO_DIR/.git" ]]; then
