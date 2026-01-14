@@ -2,6 +2,8 @@
 set -euo pipefail
 
 REPO_URL="https://github.com/kayleefedorick/ansible-for-fedora-workstation.git"
+DEV_DIR="$HOME/Developer"
+REPO_DIR="$DEV_DIR/ansible-for-fedora-workstation"
 REPO_DIR="$HOME/ansible-for-fedora-workstation"
 REQUIRED_FEDORA_VERSION="43"
 
@@ -36,7 +38,10 @@ if [[ -d "$REPO_DIR/.git" ]]; then
   echo "==> Repository already exists, updating"
   git -C "$REPO_DIR" pull --rebase
 else
-  echo "==> Cloning repository"
+  echo "==> Creating 'Developer' directory if not exists"
+  mkdir -p "$DEV_DIR"
+
+  echo "==> Cloning repository inside 'Developer' directory"
   git clone "$REPO_URL" "$REPO_DIR"
 fi
 
