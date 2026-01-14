@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_URL="https://github.com/kayleefedorick/ansible-for-fedora-workstation.git"
+# Repo URLs
+REPO_HTTPS_URL="https://github.com/kayleefedorick/ansible-for-fedora-workstation.git"
+REPO_SSH_URL="git@github.com:kayleefedorick/ansible-for-fedora-workstation.git"
+
 DEV_DIR="$HOME/Developer"
 REPO_DIR="$DEV_DIR/ansible-for-fedora-workstation"
-REPO_DIR="$HOME/ansible-for-fedora-workstation"
 REQUIRED_FEDORA_VERSION="43"
 
 echo "==> Ansible for Fedora Workstation bootstrap"
@@ -33,15 +35,24 @@ echo "✔ Fedora $VERSION_ID detected"
 echo "==> Installing base dependencies"
 sudo dnf install -y git curl ansible
 
+# Decide which repo URL to use
+if [[ -d "$HOME/.ssh" ]] && ls "$HOME/.ssh"/id_{rsa,ed25519,ecdsa} &>/dev/null; then
+  echo "✔ SSH key detected, using SSH for GitHub"
+  REPO_URL="$REPO_SSH_URL"
+else
+  echo "ℹ No SSH key detected, using HTTPS for GitHub"
+  REPO_URL="$REPO_HTTPS_URL"
+fi
+
 # Clone or update repo
 if [[ -d "$REPO_DIR/.git" ]]; then
   echo "==> Repository already exists, updating"
   git -C "$REPO_DIR" pull --rebase
 else
-  echo "==> Creating 'Developer' directory if not exists"
+  echo "==> Creating 'Developer' directory if it does not exist"
   mkdir -p "$DEV_DIR"
 
-  echo "==> Cloning repository inside 'Developer' directory"
+  echo "==> Cloning repository"
   git clone "$REPO_URL" "$REPO_DIR"
 fi
 
