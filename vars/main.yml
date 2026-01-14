@@ -109,6 +109,7 @@ rpmfusion_packages:
 flatpak_packages:
   - "{{ firefox_flatpak_id }}"
   - "{{ vscode_flatpak_id }}"
+  - org.freedesktop.Sdk.Extension.llvm21/x86_64/25.08
   - org.mozilla.Thunderbird
   - com.bitwarden.desktop
   - com.spotify.Client
