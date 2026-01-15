@@ -35,6 +35,22 @@ echo "✔ Fedora $VERSION_ID detected"
 echo "==> Installing base dependencies"
 sudo dnf install -y git curl ansible openssh xclip
 
+# Prompt to set hostname
+CURRENT_HOSTNAME="$(hostnamectl --static status 2>/dev/null || hostname)"
+
+echo "==> Hostname configuration"
+echo "Current hostname: $CURRENT_HOSTNAME"
+read -rp "Enter a new hostname (or press Enter to keep current): " NEW_HOSTNAME
+
+if [[ -n "$NEW_HOSTNAME" ]]; then
+  echo "==> Setting hostname to '$NEW_HOSTNAME'"
+  sudo hostnamectl set-hostname "$NEW_HOSTNAME"
+  echo "✔ Hostname updated"
+else
+  echo "ℹ Keeping existing hostname"
+fi
+echo
+
 # SSH key detection
 SSH_KEY=""
 for key in "$HOME/.ssh/id_ed25519" "$HOME/.ssh/id_rsa" "$HOME/.ssh/id_ecdsa"; do
