@@ -15,6 +15,7 @@ This repository contains IaC that automates the post-installation tasks for Inte
     + [Workspace Management](#workspace-management)
     + [Application Launchers](#application-launchers)
     + [Favorites Bar (Dock)](#favorites-bar-dock)
+  * [Quick Tip - Update Aliases](#quick-tip---update-aliases)
   * [Prerequisites](#prerequisites)
   * [Preparations](#preparations)
     + [Download ISO image directly (optional)](#download-iso-image-directly-optional)
@@ -31,10 +32,10 @@ This repository contains IaC that automates the post-installation tasks for Inte
     + [`tasks/flatpak.yml` - Flatpak & Flathub Applications](#tasksflatpakyml---flatpak--flathub-applications)
     + [`tasks/cargo.yml` - Rust (Cargo) Packages](#taskscargoyml---rust-cargo-packages)
     + [`tasks/security.yml` - SELinux Configuration](#taskssecurityyml---selinux-configuration)
+    + [`tasks/git.yml` - Git & SSH Configuration](#tasksgityml---git-and-ssh-configuration)
     + [`tasks/gnome.yml` - GNOME Desktop Customization](#tasksgnomeyml---gnome-desktop-customization)
     + [`tasks/fonts.yml` - User Font Installation](#tasksfontsyml---user-font-installation)
     + [`tasks/dotfiles.yml` - Dotfile Management (chezmoi)](#tasksdotfilesyml---dotfile-management-chezmoi)
-    + [`tasks/git.yml` - Git & SSH Configuration](#tasksgityml---git-and-ssh-configuration)
     + [`tasks/shell.yml` - Shell Configuration](#tasksshellyml---shell-configuration)
     + [`tasks/firefox.yml` - Firefox Policy Management](#tasksfirefoxyml---firefox-policy-management)
     * [`tasks/vscode.yml` - VS Code Extensions & Themes](#tasksvscodeyml---vs-code-extensions--themes)
@@ -112,6 +113,25 @@ You have three paths:
 | `Super + 7` | Visual Studio Code |
 | `Super + 8` | FreeCAD            |
 | `Super + 9` | KiCad              |
+
+## Quick Tip - Update Aliases
+
+You can add these to your dotfiles (`.zshrc` or `.bashrc`) to make updating your system and dotfiles easier:
+
+```bash
+# Run the full playbook to ensure system state
+alias upgrade='cd $HOME/Developer/ansible-for-fedora-workstation/ && ansible-playbook playbook.yml --ask-become-pass'
+
+# Update your dotfiles from the repository
+alias update='chezmoi update'
+```
+
+Once added, just run:
+
+```bash
+upgrade   # Apply the playbook
+update    # Pull latest dotfiles
+```
 
 ## Prerequisites
 
@@ -263,6 +283,24 @@ Flatpak applications are installed system-wide from Flathub.
 
 This provides baseline system security hardening.
 
+### `tasks/git.yml` - Git and SSH Configuration
+
+Configures Git and SSH for the invoking user:
+
+* Ensures required packages are installed:
+  * `git`
+  * `openssh`
+* Creates the user’s `~/.ssh` directory with secure permissions
+* Generates an SSH key pair only if one does not already exist
+  * Uses `ed25519` by default
+  * Avoids overwriting or reading existing (possibly passphrase-protected) keys
+* Ensures correct permissions on the public key
+* Configures global Git settings for the user:
+  * `user.name`
+  * `user.email`
+  * `core.editor`
+  * `init.defaultBranch`
+
 ### `tasks/gnome.yml` - GNOME Desktop Customization
 
 Configures the GNOME desktop environment:
@@ -297,34 +335,16 @@ This feature uses GNOME’s native GTK bookmark mechanism rather than filesystem
 * Refreshes the font cache
 * Optional cleanup of temporary files (disabled by default)
 
-Fonts are installed **per-user**, not system-wide.
+Fonts are installed per-user, not system-wide.
 
 ### `tasks/dotfiles.yml` - Dotfile Management (chezmoi)
 
 * Detects whether `chezmoi` is initialized
-* Initializes dotfiles from the configured GitHub repository if needed
+* Initializes dotfiles from your GitHub repository if needed, using SSH automatically if an SSH key (`id_ed25519`, `id_rsa`, or `id_ecdsa`) exists, otherwise falling back to HTTPS
 * Fetches upstream changes
 * Updates dotfiles only when the local copy is behind
 
 This ensures dotfiles stay in sync without unnecessary changes.
-
-### `tasks/git.yml` - Git and SSH Configuration
-
-Configures Git and SSH for the invoking user:
-
-* Ensures required packages are installed:
-  * `git`
-  * `openssh`
-* Creates the user’s `~/.ssh` directory with secure permissions
-* Generates an SSH key pair only if one does not already exist
-  * Uses `ed25519` by default
-  * Avoids overwriting or reading existing (possibly passphrase-protected) keys
-* Ensures correct permissions on the public key
-* Configures global Git settings for the user:
-  * `user.name`
-  * `user.email`
-  * `core.editor`
-  * `init.defaultBranch`
 
 ### `tasks/shell.yml` - Shell Configuration
 
