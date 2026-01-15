@@ -47,7 +47,7 @@ This repository contains IaC that automates the post-installation tasks for Inte
 
 This repository supports a single-command bootstrap that installs Ansible (if missing), clones the repository, and runs the playbook on your local Fedora Workstation. 
 
-If an SSH key is already present for the user (`~/.ssh/id_ed25519`, `id_rsa`, or `id_ecdsa`), the installer will automatically use the SSH GitHub URL; otherwise it falls back to HTTPS.
+If an SSH key is already present for the user (`~/.ssh/id_ed25519`, `id_rsa`, or `id_ecdsa`), the installer will automatically use the SSH GitHub URL; otherwise it falls back to HTTPS. If no SSH key is detected, the installer will prompt to generate one first. After generating it will copy the public key to the clipboard.
 
 ### Quick Start
 
