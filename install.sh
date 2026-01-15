@@ -31,9 +31,16 @@ fi
 
 echo "✔ Fedora $VERSION_ID detected"
 
+# Ask for sudo once
+echo "==> Requesting sudo access"
+sudo -v
+export ANSIBLE_BECOME_METHOD=sudo
+export ANSIBLE_BECOME_ASK_PASS=false
+
 # Ensure base dependencies
 echo "==> Installing base dependencies"
 sudo dnf install -y git curl ansible openssh xclip
+echo
 
 # Prompt to set hostname
 CURRENT_HOSTNAME="$(hostnamectl --static status 2>/dev/null || hostname)"
@@ -49,7 +56,6 @@ if [[ -n "$NEW_HOSTNAME" ]]; then
 else
   echo "ℹ Keeping existing hostname"
 fi
-echo
 
 # SSH key detection
 SSH_KEY=""
@@ -118,7 +124,7 @@ cd "$REPO_DIR"
 
 # Run playbook
 echo "==> Running Ansible playbook"
-ansible-playbook playbook.yml --ask-become-pass
+ansible-playbook playbook.yml # --ask-become-pass
 
 echo "==> Done! System configuration complete."
 echo "You should log out and log in again before using the system."
