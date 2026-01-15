@@ -31,6 +31,47 @@ fi
 
 echo "✔ Fedora $VERSION_ID detected"
 
+# Ensure base dependencies
+echo "==> Installing base dependencies"
+sudo dnf install -y git curl ansible openssh xclip
+
+# SSH key detection
+SSH_KEY=""
+for key in "$HOME/.ssh/id_ed25519" "$HOME/.ssh/id_rsa" "$HOME/.ssh/id_ecdsa"; do
+  if [[ -f "$key" ]]; then
+    SSH_KEY="$key"
+    break
+  fi
+done
+
+# Prompt to create SSH key if missing
+if [[ -z "$SSH_KEY" ]]; then
+  echo "ℹ No SSH key detected."
+  read -rp "Would you like to generate an SSH key now? (recommended) [Y/n]: " reply
+  reply="${reply:-Y}"
+
+  if [[ "$reply" =~ ^[Yy]$ ]]; then
+    mkdir -p "$HOME/.ssh"
+    chmod 700 "$HOME/.ssh"
+
+    echo "==> Generating ed25519 SSH key"
+    ssh-keygen -t ed25519 -f "$HOME/.ssh/id_ed25519" -C "$(whoami)@$(hostname)" -N ""
+
+    SSH_KEY="$HOME/.ssh/id_ed25519"
+
+    echo "==> Copying public key to clipboard"
+    xclip -selection clipboard < "${SSH_KEY}.pub"
+
+    echo
+    echo "✔ SSH key generated!"
+    echo "➡ Your public key has been copied to the clipboard."
+    echo "➡ Add it to GitHub: https://github.com/settings/ssh/new"
+    echo
+  else
+    echo "ℹ Skipping SSH key creation."
+  fi
+fi
+
 # Decide which repo URL to use
 SSH_KEY_FOUND=false
 for key in "$HOME/.ssh/id_rsa" "$HOME/.ssh/id_ed25519" "$HOME/.ssh/id_ecdsa"; do
@@ -44,10 +85,6 @@ else
   echo "ℹ No SSH key detected, using HTTPS for GitHub"
   REPO_URL="$REPO_HTTPS_URL"
 fi
-
-# Ensure basic tools
-echo "==> Installing base dependencies"
-sudo dnf install -y git curl ansible
 
 # Clone or update repo
 if [[ -d "$REPO_DIR/.git" ]]; then
