@@ -8,6 +8,20 @@
     - chezmoi
     - dotfiles
 
+- name: Determine repository URL
+  ansible.builtin.set_fact:
+    chezmoi_repo: "{{ 'git@github.com:' + github_username + '/dotfiles.git' if ssh_key_path is defined and lookup('file', ssh_key_path, errors='ignore') is not none else 'https://github.com/' + github_username + '/dotfiles.git' }}"
+  tags:
+    - chezmoi
+    - dotfiles
+
+- name: Show which repository will be used
+  ansible.builtin.debug:
+    msg: "Using dotfiles repository: {{ chezmoi_repo }}"
+  tags:
+    - chezmoi
+    - dotfiles
+
 - name: Check if chezmoi is initialized
   become: false
   ansible.builtin.stat:
@@ -20,7 +34,7 @@
 - name: Initialize chezmoi
   become: false
   ansible.builtin.command:
-    cmd: chezmoi init https://github.com/{{ github_username }}/dotfiles.git
+    cmd: chezmoi init {{ chezmoi_repo }}
   when: not chezmoi_state.stat.exists
   tags:
     - chezmoi
