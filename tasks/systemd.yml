@@ -1,0 +1,37 @@
+---
+- name: Detect if host is an Apple MacBook
+  ansible.builtin.shell: "cat /sys/devices/virtual/dmi/id/product_name || echo 'Unknown'"
+  register: mac_model
+  changed_when: false
+  tags:
+    - systemd
+    - macbook
+
+- name: Set fact if Apple MacBook
+  ansible.builtin.set_fact:
+    is_macbook: "{{ 'MacBook' in mac_model.stdout }}"
+  tags:
+    - systemd
+    - macbook
+
+- name: Create wifi-reset systemd sleep script
+  #become: true
+  ansible.builtin.copy:
+    dest: /usr/lib/systemd/system-sleep/wifi-reset
+    content: |
+      #!/bin/sh
+      case "$1" in
+        pre)
+          # Before sleep
+          nmcli networking off
+          ;;
+        post)
+          # After wake
+          nmcli networking on
+          ;;
+      esac
+    mode: '0755'
+  when: is_macbook | default(false)
+  tags:
+    - systemd
+    - macbook
