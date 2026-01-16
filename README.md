@@ -32,6 +32,7 @@ This repository contains IaC that automates the post-installation tasks for Inte
     + [`tasks/flatpak.yml` - Flatpak & Flathub Applications](#tasksflatpakyml---flatpak--flathub-applications)
     + [`tasks/cargo.yml` - Rust (Cargo) Packages](#taskscargoyml---rust-cargo-packages)
     + [`tasks/security.yml` - SELinux Configuration](#taskssecurityyml---selinux-configuration)
+    + [`tasks/systemd.yml` - Systemd Hook (MacBook Wi-Fi Fix)](#taskssystemdyml---systemd-hook-macbook-wi-fi-fix)
     + [`tasks/git.yml` - Git & SSH Configuration](#tasksgityml---git-and-ssh-configuration)
     + [`tasks/gnome.yml` - GNOME Desktop Customization](#tasksgnomeyml---gnome-desktop-customization)
     + [`tasks/fonts.yml` - User Font Installation](#tasksfontsyml---user-font-installation)
@@ -282,6 +283,21 @@ Flatpak applications are installed system-wide from Flathub.
 * Enables enforcing mode at runtime if not already active
 
 This provides baseline system security hardening.
+
+### `tasks/systemd.yml` - Systemd Hook (MacBook Wi-Fi Fix)
+
+Installs a systemd sleep hook to work around a Broadcom Wi-Fi issue on Intel-based Apple MacBooks where the adapter fails to power back up after wake if it was enabled before suspend.
+
+* Detects MacBook via DMI
+* Installs `/usr/lib/systemd/system-sleep/wifi-reset`
+* Turns networking off before sleep and back on after wake using `nmcli`
+* Applied only on detected systems; no effect on other hardware
+
+Run this task explicitly with:
+
+```bash
+ansible-playbook playbook.yml --tags systemd,macbook
+```
 
 ### `tasks/git.yml` - Git and SSH Configuration
 
