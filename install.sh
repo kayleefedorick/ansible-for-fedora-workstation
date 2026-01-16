@@ -124,7 +124,7 @@ cd "$REPO_DIR"
 
 # Run playbook
 echo "==> Running Ansible playbook"
-ansible-playbook playbook.yml # --ask-become-pass
+ansible-playbook playbook.yml && chezmoi update
 
 echo "==> Done! System configuration complete."
 echo "You should log out and log in again before using the system."
