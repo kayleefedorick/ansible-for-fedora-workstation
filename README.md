@@ -55,7 +55,8 @@ The installer will ask you to set the hostname for the system. If an SSH key is 
 Run this command on a **fresh Fedora Workstation 43 install**:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kayleefedorick/ansible-for-fedora-workstation/main/install.sh | bash
+# Interactive installer
+curl -fsSL https://raw.githubusercontent.com/kayleefedorick/ansible-for-fedora-workstation/main/install.sh | bash < /dev/tty
 ```
 
 ## Using This Repo
