@@ -56,7 +56,7 @@ Run this command on a **fresh Fedora Workstation 43 install**:
 
 ```bash
 # Interactive installer
-curl -fsSL https://raw.githubusercontent.com/kayleefedorick/ansible-for-fedora-workstation/main/install.sh | bash < /dev/tty
+curl -LO https://raw.githubusercontent.com/kayleefedorick/ansible-for-fedora-workstation/main/install.sh && chmod +x install.sh && ./install.sh
 ```
 
 ## Using This Repo
