@@ -29,4 +29,11 @@
     - import_tasks: tasks/dotfiles.yml
     - import_tasks: tasks/shell.yml
     - import_tasks: tasks/firefox.yml
-    - import_tasks: tasks/vscode.yml
+
+    # Editor
+    
+    # use Microsoft VS Code
+    # - import_tasks: tasks/vscode.yml
+
+    # use VSCodium
+    - import_tasks: tasks/vscodium.yml

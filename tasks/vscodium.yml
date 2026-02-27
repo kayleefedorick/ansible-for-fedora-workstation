@@ -1,0 +1,57 @@
+---
+- name: Add VSCodium repository
+  ansible.builtin.yum_repository:
+    name: gitlab.com_paulcarroty_vscodium_repo
+    description: VSCodium RPM Repo
+    baseurl: https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/rpms/
+    enabled: true
+    gpgcheck: true
+    repo_gpgcheck: true
+    gpgkey: https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
+    metadata_expire: 1h
+  become: true
+  tags:
+    - vscodium
+
+- name: Install VSCodium
+  ansible.builtin.dnf:
+    name: "{{ vscodium_package }}"
+    state: present
+  become: true
+  tags:
+    - vscodium
+
+- name: Get installed VSCodium extensions
+  become: true
+  become_user: "{{ current_user }}"
+  ansible.builtin.command:
+    cmd: "{{ vscodium_cmd }} --list-extensions"
+  register: installed_extensions
+  changed_when: false
+  failed_when: false
+  tags:
+    - vscodium
+
+- name: Install VSCodium extensions
+  become: true
+  become_user: "{{ current_user }}"
+  ansible.builtin.command:
+    cmd: "{{ vscodium_cmd }} --install-extension {{ item }}"
+  loop: "{{ vscodium_extensions | difference(installed_extensions.stdout_lines) }}"
+  register: extension_install
+  failed_when: false
+  changed_when: "'Installing extensions' in extension_install.stdout"
+  tags:
+    - vscodium
+
+- name: Install VSCodium themes
+  become: true
+  become_user: "{{ current_user }}"
+  ansible.builtin.command:
+    cmd: "{{ vscodium_cmd }} --install-extension {{ item }}"
+  loop: "{{ vscodium_themes | difference(installed_extensions.stdout_lines) }}"
+  register: theme_install
+  failed_when: false
+  changed_when: "'Installing extensions' in theme_install.stdout"
+  tags:
+    - vscodium

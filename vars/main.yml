@@ -39,7 +39,7 @@ firefox_extensions:
     install_url: https://addons.mozilla.org/firefox/downloads/latest/dracula-dark-colorscheme/latest.xpi
 firefox_kill_running: true
 
-# VS Code settings and extensions
+# Microsoft VS Code settings and extensions
 vscode_flatpak_id: com.visualstudio.code
 vscode_flatpak_cmd: "{{ vscode_flatpak_id }}"
 vscode_vsix_dir: "/home/{{ current_user }}/vscode-extensions"
@@ -49,14 +49,38 @@ vscode_extensions:
   - ms-azuretools.vscode-docker
   - redhat.ansible
   - eamodio.gitlens
-  # C / C++ development
+  # C / C++
   - ms-vscode.cpptools
   - ms-vscode.cmake-tools
-  # Vi editing
+  # Vim
   - vscodevim.vim
   # Local LLM agent
   - continue.continue
 vscode_themes:
+  - dracula-theme.theme-dracula
+
+# VSCodium package (Open source VS Code alternative)
+vscodium_package: codium
+vscodium_cmd: codium
+# Extensions from Open VSX
+vscodium_extensions:
+  # Python
+  - ms-python.python
+  # Docker
+  - ms-azuretools.vscode-docker
+  # Ansible
+  - redhat.ansible
+  # Git
+  - eamodio.gitlens
+  # C/C++
+  - llvm-vs-code-extensions.vscode-clangd
+  - ms-vscode.cmake-tools
+  - ms-vscode.cpptools-extension-pack
+  # Vim
+  - vscodevim.vim
+  # LLM
+  - continue.continue
+vscodium_themes:
   - dracula-theme.theme-dracula
 
 system_packages:
@@ -92,6 +116,13 @@ development_packages:
   - rust
   - cargo
   - cmake
+  # LLVM / Clang toolchain
+  - clang
+  - clang-tools-extra
+  - llvm
+  - lldb
+  - libcxx
+  - libcxx-devel
 
 desktop_packages:
   - gnome-tweaks
@@ -108,9 +139,9 @@ rpmfusion_packages:
   - mesa-vulkan-drivers-freeworld
 
 flatpak_packages:
+  # - "{{ vscode_flatpak_id }}"
+  # - org.freedesktop.Sdk.Extension.llvm21/x86_64/25.08
   - "{{ firefox_flatpak_id }}"
-  - "{{ vscode_flatpak_id }}"
-  - org.freedesktop.Sdk.Extension.llvm21/x86_64/25.08
   - org.mozilla.Thunderbird
   - com.bitwarden.desktop
   - com.spotify.Client
@@ -159,6 +190,7 @@ gnome_settings:
     value: "'file:///usr/share/backgrounds/gnome/sheet-d.jxl'"
   # --- Dock ---
   - key: "/org/gnome/shell/favorite-apps"
+    # VSCode: 'com.visualstudio.code.desktop',
     value: "[
       'Alacritty.desktop',
       'org.gnome.Nautilus.desktop',
@@ -166,7 +198,7 @@ gnome_settings:
       'org.mozilla.firefox.desktop',
       'org.mozilla.Thunderbird.desktop',
       'com.spotify.Client.desktop',
-      'com.visualstudio.code.desktop',
+      'codium.desktop',
       'org.freecad.FreeCAD.desktop',
       'org.kicad.kicad.desktop',
       'org.kicad.pcbcalculator.desktop',
