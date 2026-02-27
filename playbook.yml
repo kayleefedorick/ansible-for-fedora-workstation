@@ -29,6 +29,7 @@
     - import_tasks: tasks/dotfiles.yml
     - import_tasks: tasks/shell.yml
     - import_tasks: tasks/firefox.yml
+    - import_tasks: tasks/ansible-dev-tools.yml
 
     # Editor
     
