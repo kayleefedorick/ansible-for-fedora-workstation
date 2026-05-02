@@ -1,15 +1,21 @@
 ---
-
 - name: Ensure pipx is installed
   ansible.builtin.package:
     name: pipx
     state: present
+  tags:
+    - pipx
 
 - name: Ensure pipx path is configured
   ansible.builtin.command: pipx ensurepath
   changed_when: false
+  tags:
+    - pipx
 
-- name: Install ansible-dev-tools using pipx
+- name: Install pipx packages
   community.general.pipx:
-    name: ansible-dev-tools
+    name: "{{ item }}"
     state: present
+  loop: "{{ pipx_packages }}"
+  tags:
+    - pipx

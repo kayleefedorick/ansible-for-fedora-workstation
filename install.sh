@@ -7,7 +7,7 @@ REPO_SSH_URL="git@github.com:kayleefedorick/ansible-for-fedora-workstation.git"
 
 DEV_DIR="$HOME/Developer"
 REPO_DIR="$DEV_DIR/ansible-for-fedora-workstation"
-REQUIRED_FEDORA_VERSION="43"
+REQUIRED_FEDORA_VERSION="44"
 
 echo "==> Ansible for Fedora Workstation bootstrap"
 

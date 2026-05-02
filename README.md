@@ -2,9 +2,11 @@
 
 # Ansible for Fedora Workstation
 
-Configure and manage [Fedora](https://fedoraproject.org/) Workstation 43 using [Ansible](https://github.com/ansible/ansible). Fedora Workstation is a polished, easy to use operating system for laptop and desktop computers, with a complete set of tools for developers and makers of all kinds. Ansible is a suite of software tools that enables infrastructure as code.
+Configure and manage [Fedora](https://fedoraproject.org/) Workstation 44 using [Ansible](https://github.com/ansible/ansible). Fedora Workstation is a polished, easy to use operating system for laptop and desktop computers, with a complete set of tools for developers and makers of all kinds. Ansible is a suite of software tools that enables infrastructure as code.
 
-This repository contains IaC that automates the post-installation tasks for Intel/AMD x86-64 desktop and laptop computers using Fedora Workstation 43. Tasks include the installation of RPM and Flatpak packages needed for system administration, development, and engineering.
+This repository contains IaC that automates the post-installation tasks for Intel/AMD x86-64 desktop and laptop computers using Fedora Workstation 44. Tasks include the installation of RPM and Flatpak packages needed for system administration, development, and engineering.
+
+> The Fedora 43 version of this repo is preserved on the [`fedora-43`](https://github.com/kayleefedorick/ansible-for-fedora-workstation/tree/fedora-43) branch (tag `v43-final`).
 
 - [Ansible for Fedora Workstation](#ansible-for-fedora-workstation)
   * [One-Liner Install (Recommended)](#one-liner-install-recommended)
@@ -28,6 +30,8 @@ This repository contains IaC that automates the post-installation tasks for Inte
     + [`tasks/capture.yml` - User Context Detection](#taskscaptureyml---user-context-detection)
     + [`tasks/update.yml` - System Update](#tasksupdateyml---system-update)
     + [`tasks/packages.yml` - Core RPM Packages](#taskspackagesyml---core-rpm-packages)
+    + [`tasks/audio.yml` - Audio Plugin Development Packages](#tasksaudioyml---audio-plugin-development-packages)
+    + [`tasks/embedded.yml` - Embedded Hardware Development Packages](#tasksembeddedyml---embedded-hardware-development-packages)
     + [`tasks/rpmfusion.yml` - RPM Fusion Repositories](#tasksrpmfusionyml---rpm-fusion-repositories)
     + [`tasks/flatpak.yml` - Flatpak & Flathub Applications](#tasksflatpakyml---flatpak--flathub-applications)
     + [`tasks/cargo.yml` - Rust (Cargo) Packages](#taskscargoyml---rust-cargo-packages)
@@ -52,7 +56,7 @@ The installer will ask you to set the hostname for the system. If an SSH key is 
 
 ### Quick Start
 
-Run this command on a **fresh Fedora Workstation 43 install**:
+Run this command on a **fresh Fedora Workstation 44 install**:
 
 ```bash
 # Interactive installer
@@ -137,7 +141,7 @@ update    # Pull latest dotfiles
 
 ## Prerequisites
 
-- Fedora Workstation 43 (x86-64)
+- Fedora Workstation 44 (x86-64)
 - Ansible (core) >= 2.18.9
 
 ## Preparations
@@ -145,28 +149,20 @@ update    # Pull latest dotfiles
 There are multiple ways to obtain Fedora installation media:
 
 - Use Fedora Media Writer, the official, tested and supported way to make bootable media. See [Download options](https://fedoraproject.org/workstation/download)
-- Download the [ISO image using BitTorrent](https://torrent.fedoraproject.org/torrents/Fedora-Workstation-Live-x86_64-43.torrent)
-- Download the [ISO image directly](https://download.fedoraproject.org/pub/fedora/linux/releases/43/Workstation/x86_64/iso/Fedora-Workstation-Live-43-1.6.x86_64.iso)
+- Download the [ISO image using BitTorrent](https://torrent.fedoraproject.org/torrents/Fedora-Workstation-Live-x86_64-44.torrent)
+- Download the [ISO image directly](https://download.fedoraproject.org/pub/fedora/linux/releases/44/Workstation/x86_64/iso/)
 
 ### Download ISO image directly (optional)
 
-In case you decide to download the ISO image directly, check the integrity of file.
-
-Run:
+In case you decide to download the ISO image directly, verify the file's integrity against the SHA-256 checksum published on the [Fedora download page](https://fedoraproject.org/workstation/download):
 
 ```bash
-sha256sum Fedora-Workstation-Live-43-1.6.x86_64.iso
-```
-
-Ensure the output value:
-
-```bash
-2a4a16c009244eb5ab2198700eb04103793b62407e8596f30a3e0cc8ac294d77
+sha256sum Fedora-Workstation-Live-44-*.x86_64.iso
 ```
 
 ### OS and Ansible Installation
 
-Obtain and install Fedora using one of the options above. After you have finished a fresh installation of Fedora Workstation 43, login and install Ansible:
+Obtain and install Fedora using one of the options above. After you have finished a fresh installation of Fedora Workstation 44, login and install Ansible:
 
 ```bash
 sudo dnf install -y ansible
@@ -214,7 +210,7 @@ ansible-playbook playbook.yml --ask-become-pass
 
 **Check Fedora Version**
 
-* Ensures the playbook is running on Fedora Workstation 43
+* Ensures the playbook is running on Fedora Workstation 44
 * Fails fast if the distribution or version does not match
 * Prevents accidental execution on unsupported systems
 
@@ -243,20 +239,43 @@ Installs RPM packages grouped by purpose:
   * Virtualization group
 * **Development packages**
 
-  * Compilers, build tools, Python, Rust, Git, and engineering software
+  * Compilers, build tools, Python, Rust, Git, C++ libraries (Boost, Catch2), Doxygen, container tooling (podman, toolbox, docker-cli), Node.js
 * **Desktop packages**
 
   * Terminal and system information utilities
 
 All package lists are configurable via `vars/main.yml`.
 
+### `tasks/audio.yml` - Audio Plugin Development Packages
+
+Installs the LV2 plugin SDK, JACK, ALSA development headers, and DSP libraries used for audio plugin work:
+
+* LV2 stack: `lv2-devel`, `lilv-devel`, `sord-devel`, `serd-devel`, `zix-devel`, `sratom-devel`
+* Audio servers / drivers: `jack-audio-connection-kit-devel`, `alsa-lib-devel`, `pulseaudio-libs-devel`
+* File / format I/O: `libsndfile-devel`, `fluidsynth-devel`, `liblo-devel`
+* DSP: `libsamplerate-devel`, `rubberband-devel`, `fftw-devel`, `aubio-devel`
+
+Tagged `audio` for selective execution.
+
+### `tasks/embedded.yml` - Embedded Hardware Development Packages
+
+Installs the ARM Cortex-M bare-metal toolchain plus debug, USB DFU, and serial console utilities:
+
+* `arm-none-eabi-gcc-cs`, `arm-none-eabi-gcc-cs-c++`, `arm-none-eabi-newlib`
+* `openocd` (debug probe interface)
+* `dfu-util` (USB DFU bootloader flashing)
+* `screen` (serial console)
+
+Tagged `embedded` for selective execution.
+
 ### `tasks/rpmfusion.yml` - RPM Fusion Repositories
 
 * Imports RPM Fusion Free and Nonfree GPG keys
 * Enables RPM Fusion repositories matching the Fedora version
+* Enables the RPM Fusion Nonfree NVIDIA driver and Steam sub-repos
 * Installs multimedia and hardware-accelerated packages not available in Fedora proper
 
-This enables full codec support and enhanced graphics drivers.
+This enables full codec support, NVIDIA proprietary drivers (when present), Steam, and enhanced graphics drivers.
 
 ### `tasks/flatpak.yml` - Flatpak & Flathub Applications
 
@@ -432,8 +451,11 @@ Key variable groups, types, and descriptions:
 | `development_packages`       | `list of strings` | List of development tools, compilers, and programming languages.                                                |
 | `desktop_packages`           | `list of strings` | Desktop utilities and aesthetic tools.                                                                          |
 | `rpmfusion_packages`         | `list of strings` | RPM Fusion-specific packages for multimedia and hardware support.                                               |
+| `audio_dev_packages`         | `list of strings` | Audio plugin development libraries (LV2 SDK, JACK, ALSA, DSP).                                                  |
+| `embedded_packages`          | `list of strings` | Embedded hardware toolchain (ARM Cortex-M, OpenOCD, dfu-util, serial).                                          |
 | `flatpak_packages`           | `list of strings` | Flatpak applications to install from Flathub.                                                                   |
 | `cargo_packages`             | `list of strings` | Rust tools to install via Cargo.                                                                                |
+| `pipx_packages`              | `list of strings` | Python tools to install via pipx (e.g. `ansible-dev-tools`, `fv1-programmer`).                                  |
 | `gnome_extensions`           | `list of strings` | GNOME Shell extension identifiers to install and enable.                                                        |
 | `gnome_settings`             | `list of dicts`   | GNOME settings to apply. Each dict requires:<br>`key: string` – DConf path<br>`value: string` – Setting value   |
 | `gnome_sidebar_extras`       | `list of strings` | List of directory names to create in the user’s home directory and pin to the GNOME Files sidebar.              |

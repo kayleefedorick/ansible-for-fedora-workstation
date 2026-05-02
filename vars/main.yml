@@ -123,6 +123,16 @@ development_packages:
   - lldb
   - libcxx
   - libcxx-devel
+  # C++ libs / docs
+  - boost-devel
+  - catch2-devel
+  - doxygen
+  # Containers
+  - podman
+  - toolbox
+  - docker-cli
+  # JS runtime
+  - nodejs
 
 desktop_packages:
   - gnome-tweaks
@@ -137,6 +147,43 @@ rpmfusion_packages:
   - mesa-va-drivers-freeworld
   - mesa-vdpau-drivers-freeworld
   - mesa-vulkan-drivers-freeworld
+
+# Audio plugin development (LV2, JACK, ALSA, DSP)
+audio_dev_packages:
+  # LV2 plugin SDK
+  - lv2-devel
+  - lilv-devel
+  - sord-devel
+  - serd-devel
+  - zix-devel
+  - sratom-devel
+  # Audio servers / drivers
+  - jack-audio-connection-kit-devel
+  - alsa-lib-devel
+  - pulseaudio-libs-devel
+  # File / format I/O
+  - libsndfile-devel
+  - fluidsynth-devel
+  - liblo-devel
+  # DSP
+  - libsamplerate-devel
+  - rubberband-devel
+  - fftw-devel
+  - aubio-devel
+
+# Embedded hardware development (ARM Cortex-M bare-metal toolchain, debug, serial)
+embedded_packages:
+  - arm-none-eabi-gcc-cs
+  - arm-none-eabi-gcc-cs-c++
+  - arm-none-eabi-newlib
+  - openocd
+  - dfu-util
+  - screen
+
+# pipx-managed user tools
+pipx_packages:
+  - ansible-dev-tools
+  - fv1-programmer
 
 flatpak_packages:
   # - "{{ vscode_flatpak_id }}"

@@ -31,6 +31,19 @@
   tags:
     - rpmfusion
 
+- name: Enable RPM Fusion Nonfree sub-repos (NVIDIA driver, Steam)
+  community.general.ini_file:
+    path: "/etc/yum.repos.d/rpmfusion-nonfree-{{ item }}.repo"
+    section: "rpmfusion-nonfree-{{ item }}"
+    option: enabled
+    value: "1"
+    mode: "0644"
+  loop:
+    - nvidia-driver
+    - steam
+  tags:
+    - rpmfusion
+
 - name: Install RPM Fusion packages
   dnf:
     name: "{{ rpmfusion_packages }}"

@@ -1,16 +1,16 @@
 ---
-# Fedora Workstation 43 Ansible Playbook
-- name: Setup Fedora Workstation 43
+# Fedora Workstation 44 Ansible Playbook
+- name: Setup Fedora Workstation 44
   hosts: localhost
   become: true
   vars_files:
     - vars/main.yml
 
   pre_tasks:
-    - name: Check if running on Fedora 43
+    - name: Check if running on Fedora 44
       fail:
-        msg: "This playbook only runs on Fedora 43. Current distribution: {{ ansible_distribution }} {{ ansible_distribution_version }}"
-      when: ansible_distribution != 'Fedora' or ansible_distribution_version != '43'
+        msg: "This playbook only runs on Fedora 44. Current distribution: {{ ansible_distribution }} {{ ansible_distribution_version }}"
+      when: ansible_distribution != 'Fedora' or ansible_distribution_version != '44'
       tags:
         - always
 
@@ -18,6 +18,8 @@
     - import_tasks: tasks/capture.yml
     - import_tasks: tasks/update.yml
     - import_tasks: tasks/packages.yml
+    - import_tasks: tasks/audio.yml
+    - import_tasks: tasks/embedded.yml
     - import_tasks: tasks/rpmfusion.yml
     - import_tasks: tasks/flatpak.yml
     - import_tasks: tasks/cargo.yml
@@ -29,7 +31,7 @@
     - import_tasks: tasks/dotfiles.yml
     - import_tasks: tasks/shell.yml
     - import_tasks: tasks/firefox.yml
-    - import_tasks: tasks/ansible-dev-tools.yml
+    - import_tasks: tasks/pipx.yml
 
     # Editor
     
