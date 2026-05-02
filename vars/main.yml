@@ -1,5 +1,5 @@
 ---
-username: "{{ ansible_user_id }}"
+username: "{{ ansible_facts['user_id'] }}"
 
 # for dotfiles
 github_username: "kayleefedorick"
@@ -145,7 +145,7 @@ rpmfusion_packages:
   - libavcodec-freeworld
   - libheif-freeworld
   - mesa-va-drivers-freeworld
-  - mesa-vdpau-drivers-freeworld
+  # mesa-vdpau-drivers-freeworld dropped from F44 repos (merged upstream)
   - mesa-vulkan-drivers-freeworld
 
 # Audio plugin development (LV2, JACK, ALSA, DSP)

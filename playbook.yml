@@ -9,8 +9,8 @@
   pre_tasks:
     - name: Check if running on Fedora 44
       fail:
-        msg: "This playbook only runs on Fedora 44. Current distribution: {{ ansible_distribution }} {{ ansible_distribution_version }}"
-      when: ansible_distribution != 'Fedora' or ansible_distribution_version != '44'
+        msg: "This playbook only runs on Fedora 44. Current distribution: {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}"
+      when: ansible_facts['distribution'] != 'Fedora' or ansible_facts['distribution_version'] != '44'
       tags:
         - always
 

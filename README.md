@@ -126,7 +126,8 @@ You can add these to your dotfiles (`.zshrc` or `.bashrc`) to make updating your
 
 ```bash
 # Run the full playbook to ensure system state
-alias upgrade='cd $HOME/Developer/ansible-for-fedora-workstation/ && ansible-playbook playbook.yml --ask-become-pass'
+# ansible.cfg has become_ask_pass=true, so single BECOME prompt
+alias upgrade='cd $HOME/Developer/ansible-for-fedora-workstation/ && ansible-playbook playbook.yml'
 
 # Update your dotfiles from the repository
 alias update='chezmoi update'
