@@ -60,3 +60,89 @@
     - systemd
     - macbook
     - backlight
+
+- name: Ensure audio group exists
+  ansible.builtin.group:
+    name: audio
+    state: present
+  tags:
+    - systemd
+    - audio
+
+- name: Add user to audio group for realtime memlock
+  ansible.builtin.user:
+    name: "{{ current_user }}"
+    groups: audio
+    append: true
+  tags:
+    - systemd
+    - audio
+
+- name: Ensure user@.service drop-in directory exists
+  ansible.builtin.file:
+    path: /etc/systemd/system/user@.service.d
+    state: directory
+    mode: "0755"
+  tags:
+    - systemd
+    - audio
+
+- name: Set unlimited memlock system-wide default
+  ansible.builtin.file:
+    path: "/etc/systemd/{{ item }}.conf.d"
+    state: directory
+    mode: "0755"
+  check_mode: false
+  loop:
+    - system
+    - user
+  tags:
+    - systemd
+    - audio
+
+- name: Set unlimited memlock system-wide default
+  ansible.builtin.copy:
+    dest: "/etc/systemd/{{ item }}.conf.d/99-audio-memlock.conf"
+    content: |
+      [Manager]
+      DefaultLimitMEMLOCK=infinity
+    mode: "0644"
+  loop:
+    - system
+    - user
+  register: memlock_defaults
+  tags:
+    - systemd
+    - audio
+
+- name: Add pam_limits to systemd-user PAM for memlock
+  ansible.builtin.copy:
+    dest: /etc/pam.d/systemd-user
+    content: |
+      # Used by systemd --user instances.
+
+      -account sufficient pam_systemd_home.so
+      account  sufficient pam_unix.so no_pass_expiry
+      account  include    system-auth
+
+      session  required   pam_selinux.so close
+      session  required   pam_selinux.so nottys open
+      session  required   pam_loginuid.so
+      session  optional   pam_keyinit.so force revoke
+      session  required   pam_namespace.so
+      -session optional   pam_systemd_home.so
+      session  optional   pam_umask.so silent
+      session  include    system-auth
+      session  required   pam_limits.so
+    mode: "0644"
+  tags:
+    - systemd
+    - audio
+
+- name: Reload systemd if memlock config changed
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: memlock_defaults.changed
+  tags:
+    - systemd
+    - audio
