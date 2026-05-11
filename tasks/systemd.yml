@@ -6,6 +6,7 @@
   tags:
     - systemd
     - macbook
+    - backlight
 
 - name: Set fact if Apple MacBook
   ansible.builtin.set_fact:
@@ -13,6 +14,7 @@
   tags:
     - systemd
     - macbook
+    - backlight
 
 - name: Create wifi-reset systemd sleep script
   #become: true
@@ -35,3 +37,26 @@
   tags:
     - systemd
     - macbook
+
+- name: Check if acpi_backlight=native is already set
+  ansible.builtin.shell:
+    cmd: grep -q "acpi_backlight=native" /proc/cmdline
+  register: backlight_need
+  changed_when: false
+  failed_when: false
+  when: is_macbook | default(false)
+  tags:
+    - systemd
+    - macbook
+    - backlight
+
+- name: Fix MacBook backlight (use Intel native driver instead of buggy ACPI)
+  ansible.builtin.command:
+    cmd: grubby --update-kernel=ALL --args="acpi_backlight=native"
+  when:
+    - is_macbook | default(false)
+    - backlight_need.rc != 0
+  tags:
+    - systemd
+    - macbook
+    - backlight

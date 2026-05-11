@@ -19,6 +19,7 @@
     - import_tasks: tasks/update.yml
     - import_tasks: tasks/packages.yml
     - import_tasks: tasks/audio.yml
+    - import_tasks: tasks/ardour.yml
     - import_tasks: tasks/embedded.yml
     - import_tasks: tasks/rpmfusion.yml
     - import_tasks: tasks/flatpak.yml

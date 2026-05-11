@@ -1,0 +1,171 @@
+---
+- name: Install Ardour build dependencies
+  dnf:
+    name: "{{ ardour_build_deps }}"
+    state: present
+  tags:
+    - packages
+    - ardour
+
+- name: Ensure Ardour source directory exists
+  file:
+    path: "{{ ardour_source_dir }}"
+    state: directory
+    owner: "{{ current_user }}"
+    group: "{{ current_user }}"
+  become: false
+  tags:
+    - ardour
+
+- name: Clone or update Ardour source
+  git:
+    repo: "{{ ardour_repo }}"
+    dest: "{{ ardour_source_dir }}"
+    version: "{{ ardour_version }}"
+    update: true
+    force: true
+  become: false
+  register: ardour_git
+  tags:
+    - ardour
+
+- name: Build Ardour configure flag string
+  set_fact:
+    ardour_full_configure: "./waf configure {{ ardour_configure_flags }} --prefix={{ ardour_prefix }}"
+  tags:
+    - ardour
+
+- name: Check if Ardour is already configured
+  stat:
+    path: "{{ ardour_source_dir }}/build/c4che/_cache.py"
+  register: ardour_configured
+  tags:
+    - ardour
+
+- name: Check if configure sentinel file exists
+  stat:
+    path: "{{ ardour_source_dir }}/build/.ansible_waf_configure_cmd"
+  register: ardour_configure_sentinel
+  tags:
+    - ardour
+
+- name: Read stored configure command to detect flag changes
+  slurp:
+    src: "{{ ardour_source_dir }}/build/.ansible_waf_configure_cmd"
+  register: ardour_stored_configure
+  become: false
+  when: ardour_configure_sentinel.stat.exists
+  tags:
+    - ardour
+
+- name: Check if configure flags changed
+  set_fact:
+    ardour_configure_changed: "{{ not ardour_configure_sentinel.stat.exists or (ardour_stored_configure.content | default('') | b64decode) != ardour_full_configure }}"
+  tags:
+    - ardour
+
+- name: Check if Ardour was built (binary exists)
+  find:
+    paths: "{{ ardour_source_dir }}/build/gtk2_ardour"
+    patterns: "ardour-[0-9]*"
+    file_type: file
+    recurse: false
+  register: ardour_existing_binary
+  tags:
+    - ardour
+
+- name: Determine if build is required
+  set_fact:
+    ardour_build_required: "{{ ardour_git.changed or ardour_configure_changed or ardour_existing_binary.matched == 0 or (ardour_force_build | default(false) | bool) }}"
+  tags:
+    - ardour
+
+- name: Configure Ardour build
+  command:
+    cmd: "{{ ardour_full_configure }}"
+    chdir: "{{ ardour_source_dir }}"
+  become: false
+  when: ardour_build_required
+  tags:
+    - ardour
+
+- name: Record configure command for future change detection
+  copy:
+    content: "{{ ardour_full_configure }}"
+    dest: "{{ ardour_source_dir }}/build/.ansible_waf_configure_cmd"
+    mode: "0644"
+  become: false
+  when: ardour_build_required
+  tags:
+    - ardour
+
+- name: Build Ardour
+  command:
+    cmd: "./waf -j{{ ansible_facts['processor_cores'] | default(4) }}"
+    chdir: "{{ ardour_source_dir }}"
+  become: false
+  when: ardour_build_required
+  tags:
+    - ardour
+
+- name: Install Ardour
+  command:
+    cmd: "./waf install"
+    chdir: "{{ ardour_source_dir }}"
+  become: true
+  when: ardour_build_required
+  tags:
+    - ardour
+
+- name: Find latest built Ardour binary
+  ansible.builtin.shell:
+    cmd: ls -t {{ ardour_source_dir }}/build/gtk2_ardour/ardour-[0-9]* | head -1
+    executable: /bin/bash
+  register: ardour_built_binary
+  changed_when: false
+  when: ardour_build_required
+  tags:
+    - ardour
+
+- name: Find latest installed Ardour binary
+  ansible.builtin.shell:
+    cmd: ls -t /usr/local/lib/ardour*/ardour-[0-9]* | head -1
+    executable: /bin/bash
+  register: ardour_installed_binary
+  changed_when: false
+  become: true
+  when: ardour_build_required
+  tags:
+    - ardour
+
+- name: Replace installed binary with symlink to build directory
+  file:
+    src: "{{ ardour_built_binary.stdout }}"
+    dest: "{{ ardour_installed_binary.stdout }}"
+    state: link
+    force: true
+  become: true
+  when:
+    - ardour_build_required
+    - ardour_installed_binary.stdout | default('') | length > 0
+    - ardour_built_binary.stdout | default('') | length > 0
+  tags:
+    - ardour
+
+- name: Remove stale Ardour binaries from install directory
+  ansible.builtin.shell:
+    cmd: |
+      shopt -s nullglob
+      target="{{ ardour_installed_binary.stdout }}"
+      for f in /usr/local/lib/ardour*/ardour-[0-9]*; do
+        [ "$f" != "$target" ] && rm -f "$f"
+      done
+    executable: /bin/bash
+  become: true
+  changed_when: false
+  failed_when: false
+  when:
+    - ardour_build_required
+    - ardour_installed_binary.stdout | default('') | length > 0
+  tags:
+    - ardour

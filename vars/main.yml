@@ -249,7 +249,8 @@ gnome_settings:
       'org.freecad.FreeCAD.desktop',
       'org.kicad.kicad.desktop',
       'org.kicad.pcbcalculator.desktop',
-      'io.github.Qalculate.desktop']"
+      'io.github.Qalculate.desktop',
+      'ardour9.desktop']"
 # Key Bindings
   # --- Launchers ---
   - key: "/org/gnome/settings-daemon/plugins/media-keys/home"
@@ -332,3 +333,37 @@ font_urls:
 font_temp_dir: "/tmp/fonts_download"
 
 #cleanup_fonts: true
+
+# Ardour DAW (built from source)
+ardour_source_dir: "/home/{{ current_user }}/Developer/bent-ardour"
+ardour_repo: "ssh://git@git.betternoise.toys:2222/betternoisetoys/bent-ardour.git"
+ardour_version: "master"
+ardour_prefix: "/usr/local"
+ardour_configure_flags: "--freedesktop --with-backends=jack,alsa,pulseaudio,dummy --ptformat --no-phone-home --cxx17"
+ardour_build_deps:
+  - taglib-devel
+  - libcurl-devel
+  - libarchive-devel
+  - vamp-plugin-sdk-devel
+  - libusb1-devel
+  - libpng-devel
+  - pango-devel
+  - pangomm-devel
+  - cairo-devel
+  - cairomm-devel
+  - glibmm2.4-devel
+  - libXrandr-devel
+  - libXi-devel
+  - libXinerama-devel
+  - libsigc++20-devel
+  - suil-devel
+  - libxml2-devel
+  - libwebsockets-devel
+  - libogg-devel
+  - flac-devel
+  - fontconfig-devel
+  - liblrdf-devel
+  - systemd-devel
+  - itstool
+  - gettext
+  - intltool
